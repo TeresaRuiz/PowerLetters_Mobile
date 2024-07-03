@@ -6,12 +6,12 @@ import Button from '../components/Buttons/Button';
 const Sesion = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Hello Again!</Text>
-      <Text style={styles.subtitle}>Welcome back you've been missed!</Text>
-      <Input placeholder="Enter username" />
-      <Input placeholder="Password" secureTextEntry />
-      <Button title="Sign In" onPress={() => { /* Add your sign-in logic here */ }} />
-      <Button title="Register" style={styles.registerButton} onPress={() => navigation.navigate('SignUp')} />
+      <Text style={styles.title}>Hola de nuevo!</Text>
+      <Text style={styles.subtitle}>Bienvenido/a ingresa tus credenciales para ingresar</Text>
+      <Input placeholder="Ingresa tu usuario" />
+      <Input placeholder="Ingresa tu contraseña" secureTextEntry />
+      <Button title="Inicia sesión" onPress={() => { /* Add your sign-in logic here */ }} />
+      <Button title="Registrate" style={styles.registerButton} onPress={() => navigation.navigate('SignUp')} />
     </View>
   );
 };
