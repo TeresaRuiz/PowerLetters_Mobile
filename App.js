@@ -1,7 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import Sesion from './src/screens/Sesion';
-import Registro from './src/screens/Registro';
+import Registro from './src/screens/SignUp.js';
 
 const Stack = createStackNavigator();
 

@@ -1,11 +1,102 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import InputField from '../components/InputField';
-import SocialButton from '../components/SocialButton';
+import { StatusBar } from 'expo-status-bar';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from 'react-native';
+import InputField from '../components/Inputs/InputField.js';
+import SocialButton from '../components/Buttons/SocialButton.js';
+import * as Constantes from '../utils/constantes'
+import { useFocusEffect } from '@react-navigation/native';
 
-const Sesion = ({ navigation }) => {
+export default function Sesion({ navigation }) {
+  const ip = Constantes.IP;
+
+  const [isContra, setIsContra] = useState(true)
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  // Efecto para cargar los detalles del carrito al cargar la pantalla o al enfocarse en ella
+  useFocusEffect(
+    // La función useFocusEffect ejecuta un efecto cada vez que la pantalla se enfoca.
+    React.useCallback(() => {
+      validarSesion(); // Llama a la función getDetalleCarrito.
+    }, [])
+  );
+
+  const validarSesion = async () => {
+    try {
+      const response = await fetch(`${ip}/PowerLetters_Mobile/api/services/public/usuario.php?action=getUser`, {
+        method: 'GET'
+      });
+
+      const data = await response.json();
+
+      if (data.status === 1) {
+        navigation.navigate('TabNavigator');
+        console.log("Se ingresa con la sesión activa")
+      } else {
+        console.log("No hay sesión activa")
+        return
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Error', 'Ocurrió un error al validar la sesión');
+    }
+  }
+
+  const cerrarSesion = async () => {
+    try {
+      const response = await fetch(`${ip}/PowerLetters_Mobile/api/services/public/usuario.php?action=logOut`, {
+        method: 'GET'
+      });
+
+      const data = await response.json();
+
+      if (data.status) {
+        console.log("Sesión Finalizada")
+      } else {
+        console.log('No se pudo eliminar la sesión')
+      }
+    } catch (error) {
+      console.error(error, "Error desde Catch");
+      Alert.alert('Error', 'Ocurrió un error al iniciar sesión con bryancito');
+    }
+  }
+
+  const handlerLogin = async () => {
+    if (!usuario || !contrasenia) {
+      Alert.alert('Error', 'Por favor ingrese su correo y contraseña');
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('correo', usuario);
+      formData.append('clave', contrasenia);
+
+      const response = await fetch(`${ip}/PowerLetters_Mobile/api/services/public/usuario.php.php?action=logIn`, {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (data.status) {
+        setContrasenia('')
+        setUsuario('')
+        navigation.navigate('TabNavigator');
+      } else {
+        console.log(data);
+        Alert.alert('Error sesión', data.error);
+      }
+    } catch (error) {
+      console.error(error, "Error desde Catch");
+      Alert.alert('Error', 'Ocurrió un error al iniciar sesión');
+    }
+  };
+
+  const irRegistrar = async () => {
+    navigation.navigate('SignUp');
+  };
+
+  useEffect(() => { validarSesion() }, [])
 
   return (
     <View style={styles.container}>
@@ -98,5 +189,3 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 });
-
-export default Sesion;

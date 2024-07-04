@@ -8,4 +8,3 @@ define('SERVER', 'localhost');
 define('DATABASE', 'powerletters');
 define('USERNAME', 'powerlettersAdmin2');
 define('PASSWORD', 'tienda123');
-?>
