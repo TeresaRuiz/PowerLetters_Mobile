@@ -3,19 +3,27 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import InputField from '../components/InputField';
 import SocialButton from '../components/SocialButton';
 
-const Sesion = ({ navigation }) => {
+const Registro = ({ navigation }) => {
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   return (
     <View style={styles.container}>
       <Image source={require('../img/logo_blanco.png')} style={styles.image} />
-      <Text style={styles.title}>¡Hola de nuevo!</Text>
-      <Text style={styles.subtitle}>Bienvenido a Power Letters</Text>
+      <Text style={styles.title}>¡Regístrate!</Text>
+      <Text style={styles.subtitle}>Crea tu cuenta en Power Letters</Text>
       <InputField
         placeholder="Ingresa tu usuario"
         value={username}
         onChangeText={setUsername}
+      />
+      <InputField
+        placeholder="Ingresa tu correo"
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
       />
       <InputField
         placeholder="Ingresa tu contraseña"
@@ -23,18 +31,23 @@ const Sesion = ({ navigation }) => {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Text style={styles.recoveryText}>Recuerda tu contraseña</Text>
-      <TouchableOpacity style={styles.signInButton} onPress={() => { /* Your sign in logic here */ }}>
-        <Text style={styles.signInButtonText}>Inicio de sesión</Text>
+      <InputField
+        placeholder="Confirma tu contraseña"
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
+        secureTextEntry
+      />
+      <TouchableOpacity style={styles.signUpButton} onPress={() => { /* Your sign up logic here */ }}>
+        <Text style={styles.signUpButtonText}>Registrarse</Text>
       </TouchableOpacity>
-      <Text style={styles.orText}>― O continua con ―</Text>
+      <Text style={styles.orText}>― O regístrate con ―</Text>
       <View style={styles.socialContainer}>
         <SocialButton name="google" size={30} color="#DB4437" />
         <SocialButton name="apple" size={30} color="#000000" />
         <SocialButton name="facebook" size={30} color="#3B5998" />
       </View>
-      <TouchableOpacity onPress={() => navigation.navigate('Registro')}>
-        <Text style={styles.signUpText}>¿No tienes una cuenta? Regístrate</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('Sesion')}>
+        <Text style={styles.signInText}>¿Ya tienes una cuenta? Inicia sesión</Text>
       </TouchableOpacity>
     </View>
   );
@@ -59,12 +72,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     textAlign: 'center',
   },
-  recoveryText: {
-    alignSelf: 'flex-end',
-    color: '#000000',
-    marginBottom: 20,
-  },
-  signInButton: {
+  signUpButton: {
     width: '100%',
     height: 50,
     borderRadius: 10,
@@ -73,7 +81,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
-  signInButtonText: {
+  signUpButtonText: {
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: 'bold',
@@ -89,7 +97,7 @@ const styles = StyleSheet.create({
     width: '80%',
     marginBottom: 20,
   },
-  signUpText: {
+  signInText: {
     color: '#000000',
   },
   image: {
@@ -99,4 +107,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Sesion;
+export default Registro;
