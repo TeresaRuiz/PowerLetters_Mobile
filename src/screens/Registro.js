@@ -23,7 +23,7 @@ export default function Registro({ navigation }) {
     const [correoUsuario, setCorreoUsuario] = useState('');
     const [telefonoUsuario, setTelefonoUsuario] = useState('');
     const [direccionUsuario, setDireccionUsuario] = useState('');
-    const [nacimientoUsuario, setNacimientoUsuario] = useState('');
+    const [fechaNacimiento, setFechaNacimiento] = useState('');
     const [claveUsuario, setClaveUsuario] = useState('');
     const [confirmarClaveUsuario, setConfirmarClaveUsuario] = useState('');
 
@@ -110,7 +110,7 @@ export default function Registro({ navigation }) {
             formData.append('correoCliente', correoUsuario);
             formData.append('direccionCliente', direccionUsuario);
             formData.append('duiCliente', duiUsuario);
-            formData.append('nacimientoCliente', nacimientoUsuario);
+            formData.append('fechaNacimiento', fechaNacimiento);
             formData.append('telefonoCliente', telefonoUsuario);
             formData.append('claveCliente', claveUsuario);
             formData.append('confirmarClave', confirmarClaveUsuario);
@@ -170,24 +170,24 @@ export default function Registro({ navigation }) {
                 setValor={direccionUsuario}
                 onChangeText={setDireccionUsuario}
             />
-            <TouchableOpacity onPress={showDatepicker} style={styles.contenedorFecha}>
-                <Text style={styles.fecha}>{nacimientoUsuario || 'Selecciona tu fecha de nacimiento'}</Text>
-            </TouchableOpacity>
+            <View style={styles.contenedorFecha}>
+                <Text style={styles.fecha}>Fecha Nacimiento</Text>
 
-            {show && (
-                <View style={styles.contenedorFecha}>
+                <TouchableOpacity onPress={showDatepicker}><Text style={styles.fechaSeleccionar}>Seleccionar Fecha:</Text></TouchableOpacity>
+                <Text style={styles.fecha}>Seleccion: {fechaNacimiento}</Text>
+
+                {show && (
                     <DateTimePicker
                         testID="dateTimePicker"
                         value={date}
                         mode={mode}
                         is24Hour={true}
-                        display="default"
+                        minimumDate={new Date(new Date().getFullYear() - 100, new Date().getMonth(), new Date().getDate())} // Fecha mínima permitida (100 años atrás desde la fecha actual)
+                        maximumDate={new Date()} // Fecha máxima permitida (fecha actual)
                         onChange={onChange}
-                        style={styles.fechaSeleccionar}
                     />
-                </View>
-            )}
-
+                )}
+            </View>
             <InputField
                 placeholder="Ingresa tu contraseña"
                 setValor={claveUsuario}
@@ -271,27 +271,22 @@ const styles = StyleSheet.create({
         height: 220,
         marginBottom: 20,
     },
-    contenedorFecha: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: '100%',
-        marginBottom: 20,
-        backgroundColor: '#FFFFFF',
-        borderRadius: 10,
-    },
     fecha: {
-        flex: 1,
-        height: 50,
-        color: '#000000',
         fontWeight: '600',
-        paddingHorizontal: 20,
+        color: '#000000'
     },
     fechaSeleccionar: {
-        position: 'absolute',
-        right: 20,
         fontWeight: '700',
-        color: '#000000',
-        textDecorationLine: 'underline',
+        color: '#322C2B',
+        textDecorationLine: 'underline'
     },
+    contenedorFecha: {
+        backgroundColor: 'white',
+        color: "#fff", fontWeight: '800',
+        width: '100%',
+        borderRadius: 8,
+        padding: 5,
+        marginVertical: 10
+    }
 });
 
