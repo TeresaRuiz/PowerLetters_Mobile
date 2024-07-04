@@ -13,12 +13,12 @@ const App = () => {
         <Stack.Screen 
           name="Sesion" 
           component={Sesion} 
-          options={{ title: 'Login' }}
+          options={{ headerShown: false }}
         />
         <Stack.Screen 
           name="SignUp" 
           component={SignUp} 
-          options={{ title: 'Register' }}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>
