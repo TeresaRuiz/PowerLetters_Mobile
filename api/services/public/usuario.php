@@ -1,6 +1,6 @@
 <?php
 // Se incluye la clase del modelo.
-require_once('../../models/data/usuario_data.php');
+require_once ('../../models/data/usuario_data.php');
 
 // Se comprueba si existe una acción a realizar, de lo contrario se finaliza el script con un mensaje de error.
 if (isset($_GET['action'])) {
@@ -184,7 +184,7 @@ if (isset($_GET['action'])) {
                 if (!$captcha['success']) {
                     $result['recaptcha'] = 1;
                     $result['error'] = 'No eres humano';
-                } elseif(!isset($_POST['condicion'])) {
+                } elseif (!isset($_POST['condicion'])) {
                     $result['error'] = 'Debe marcar la aceptación de términos y condiciones';
                 } elseif (
                     !$usuario->setNombre($_POST['nombre_usuario']) or
@@ -195,7 +195,7 @@ if (isset($_GET['action'])) {
                     !$usuario->setNacimiento($_POST['nacimiento_usuario']) or
                     !$usuario->setTelefono($_POST['telefono_usuario']) or
                     !$usuario->setImagen($_FILES['imagen']) or
-                    !$usuario->setClave($_POST['clave_usuario']) 
+                    !$usuario->setClave($_POST['clave_usuario'])
                 ) {
                     $result['error'] = $usuario->getDataError();
                 } elseif ($_POST['clave_usuario'] != $_POST['confirmarClave']) {
@@ -218,6 +218,39 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'La cuenta ha sido desactivada';
                 }
                 break;
+            case 'signUpMovil':
+                $_POST = Validator::validateForm($_POST);
+                if (
+                    !$usuario->setNombre($_POST['nombreCliente']) or
+                    !$usuario->setApellido($_POST['apellidoCliente']) or
+                    !$usuario->setCorreo($_POST['correoCliente']) or
+                    !$usuario->setDireccion($_POST['direccionCliente']) or
+                    !$usuario->setDUI($_POST['duiCliente']) or
+                    !$usuario->setNacimiento($_POST['nacimientoCliente']) or
+                    !$usuario->setTelefono($_POST['telefonoCliente']) or
+                    !$usuario->setClave($_POST['claveCliente'])
+                ) {
+                    $result['error'] = $usuario->getDataError();
+                } elseif ($_POST['claveCliente'] != $_POST['confirmarClave']) {
+                    $result['error'] = 'Contraseñas diferentes';
+                } elseif ($usuario->createRow()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Cuenta registrada correctamente';
+                } else {
+                    $result['error'] = 'Ocurrió un problema al registrar la cuenta';
+                }
+                break;
+            case 'logInMovil':
+                $_POST = Validator::validateForm($_POST);
+                if (!$usuario->checkUser($_POST['correo'], $_POST['clave'])) {
+                    $result['error'] = 'Datos incorrectos';
+                } elseif ($usuario->checkStatus()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Autenticación correcta';
+                } else {
+                    $result['error'] = 'La cuenta ha sido desactivada';
+                }
+                break;
             default:
                 $result['error'] = 'Acción no disponible fuera de la sesión';
         }
@@ -227,7 +260,7 @@ if (isset($_GET['action'])) {
     // Se indica el tipo de contenido a mostrar y su respectivo conjunto de caracteres.
     header('Content-type: application/json; charset=utf-8');
     // Se imprime el resultado en formato JSON y se retorna al controlador.
-    print(json_encode($result));
+    print (json_encode($result));
 } else {
-    print(json_encode('Recurso no disponible'));
+    print (json_encode('Recurso no disponible'));
 }

@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { Platform, StyleSheet } from 'react-native';
 import { TextInputMask } from 'react-native-masked-text';
 
-export default function MaskedInputDui({ dui, setDui }) {
+export default function MaskedInputDui() {
+    const [dui, setDui] = useState('');
+
     return (
         <TextInputMask
             style={styles.input}
@@ -13,7 +15,7 @@ export default function MaskedInputDui({ dui, setDui }) {
                 mask: '99999999-9' // Formato para el número de DUI
             }}
             value={dui}
-            onChangeText={setDui}
+            onChangeText={(text) => setDui(text)}
         />
     );
 }
@@ -27,4 +29,4 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         marginBottom: 20,
     },
-});
+})

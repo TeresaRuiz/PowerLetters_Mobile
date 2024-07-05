@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, TextInput, Platform } from 'react-native';
 
-export default function InputEmail({ placeholder, setValor, setTextChange }) {
+export default function InputEmail({ placeholder }) {
+  const [valor, setValor] = useState('');
+
   return (
     <TextInput
       style={styles.input}
-      placeholder={placeholder}
-      value={setValor}
+      placeholder="Correo electrónico"
+      value={valor}
       placeholderTextColor={'#A1A1A1'}
-      onChangeText={setTextChange}
+      onChangeText={(text) => setValor(text)}
       keyboardType="email-address"
     />
   );

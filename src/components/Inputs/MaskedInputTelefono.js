@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { Platform, TextInput, StyleSheet } from 'react-native';
 import { TextInputMask } from 'react-native-masked-text';
 
-export default function MaskedInputTelefono({ telefono, setTelefono }) {
+export default function MaskedInputTelefono() {
+    const [telefono, setTelefono] = useState('');
+
     return (
         <TextInputMask
             style={styles.input}
@@ -13,7 +15,7 @@ export default function MaskedInputTelefono({ telefono, setTelefono }) {
                 mask: '9999-9999' // Formato para el número de teléfono
             }}
             value={telefono}
-            onChangeText={setTelefono}
+            onChangeText={(text) => setTelefono(text)}
         />
     );
 }
@@ -27,4 +29,4 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         marginBottom: 20,
     },
-});
+})
