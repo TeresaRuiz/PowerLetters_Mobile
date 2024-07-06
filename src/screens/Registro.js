@@ -18,15 +18,15 @@ export default function Registro({ navigation }) {
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
 
-    const [nombre, setNombre] = useState('');
-    const [apellido, setApellido] = useState('');
-    const [email, setEmail] = useState('');
-    const [direccion, setDireccion] = useState('');
-    const [dui, setDui] = useState('');
-    const [telefono, setTelefono] = useState('');
-    const [fechaNacimiento, setFechaNacimiento] = useState('');
-    const [clave, setClave] = useState('');
-    const [confirmarClave, setConfirmarClave] = useState('');
+    const [nombre, setNombre] = useState('')
+    const [apellido, setApellido] = useState('')
+    const [email, setEmail] = useState('')
+    const [direccion, setDireccion] = useState('')
+    const [dui, setDui] = useState('')
+    const [telefono, setTelefono] = useState('')
+    const [fechaNacimiento, setFechaNacimiento] = useState('')
+    const [clave, setClave] = useState('')
+    const [confirmarClave, setConfirmarClave] = useState('')
 
     // Expresiones regulares para validar DUI y teléfono
     const duiRegex = /^\d{8}-\d$/;
@@ -112,7 +112,8 @@ export default function Registro({ navigation }) {
             formData.append('claveCliente', clave);
             formData.append('confirmarClave', confirmarClave);
 
-            const response = await fetch(`${ip}/coffeeshop/api/services/public/cliente.php?action=signUpMovil`, {
+
+            const response = await fetch(`${ip}/NewPowerLetters/api/services/public/cliente.php?action=signUpMovil`, {
                 method: 'POST',
                 body: formData
             });
@@ -147,21 +148,18 @@ export default function Registro({ navigation }) {
                 setValor={apellido}
                 setTextChange={setApellido}
             />
-            <MaskedInputDui
-                dui={dui}
-                setDui={setDui} />
             <InputEmail
                 placeHolder='Correo del usuario'
                 setValor={email}
                 setTextChange={setEmail} />
-            <MaskedInputTelefono
-                telefono={telefono}
-                setTelefono={setTelefono} />
             <InputMultiline
                 placeHolder='Dirección del usuario'
                 setValor={setDireccion}
                 valor={direccion}
                 setTextChange={setDireccion} />
+            <MaskedInputDui
+                dui={dui}
+                setDui={setDui} />
             <View style={styles.contenedorFecha}>
                 <Text style={styles.fecha}>Fecha Nacimiento</Text>
 
@@ -180,6 +178,9 @@ export default function Registro({ navigation }) {
                     />
                 )}
             </View>
+            <MaskedInputTelefono
+                telefono={telefono}
+                setTelefono={setTelefono} />
             <InputField
                 placeHolder='Contraseña'
                 contra={true}
@@ -214,6 +215,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#f0ecfc',
         marginTop: 20,
+        paddingTop: Constants.statusBarHeight + 5,
     },
     title: {
         fontSize: 28,
