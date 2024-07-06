@@ -36,7 +36,7 @@ export default function Registro({ navigation }) {
         const currentDate = selectedDate || date;
         setShow(false);
         setDate(currentDate);
-        
+
         const year = currentDate.getFullYear();
         const month = String(currentDate.getMonth() + 1).padStart(2, '0');
         const day = String(currentDate.getDate()).padStart(2, '0');
@@ -73,7 +73,6 @@ export default function Registro({ navigation }) {
                 Alert.alert('Error', 'Debes tener al menos 18 años para registrarte.');
                 return;
             }
-
             const formData = new FormData();
             formData.append('nombreCliente', nombre);
             formData.append('apellidoCliente', apellido);
@@ -84,6 +83,7 @@ export default function Registro({ navigation }) {
             formData.append('telefonoCliente', telefono);
             formData.append('claveCliente', clave);
             formData.append('confirmarClave', confirmarClave);
+
 
             const response = await fetch(`${ip}/PowerLetters_Mobile/api/services/public/usuario.php?action=signUpMovil`, {
                 method: 'POST',
@@ -110,33 +110,33 @@ export default function Registro({ navigation }) {
 
             <InputField
                 placeholder="Nombre del usuario"
-                setValor={nombre}
-                onChangeText={setNombre}
+                ssetValor={nombre}
+                setTextChange={setNombre}
             />
             <InputField
                 placeholder="Apellido del usuario"
                 setValor={apellido}
-                onChangeText={setApellido}
+                setTextChange={setApellido}
             />
             <MaskedInputDui
                 placeholder="Ingresa tu DUI"
                 setValor={dui}
-                onChangeText={setDui}
+                setTextChange={setDui}
             />
             <InputEmail
                 placeholder="Correo del usuario"
                 setValor={email}
-                onChangeText={setEmail}
+                setTextChange={setEmail}
             />
             <MaskedInputTelefono
                 placeholder="Ingresa tu teléfono"
                 setValor={telefono}
-                onChangeText={setTelefono}
+                setTextChange={setTelefono}
             />
             <InputMultiline
                 placeholder="Dirección del usuario"
                 setValor={direccion}
-                onChangeText={setDireccion}
+                setTextChange={setDireccion}
             />
             <View style={styles.contenedorFecha}>
                 <Text style={styles.fecha}>Fecha Nacimiento</Text>
@@ -160,13 +160,13 @@ export default function Registro({ navigation }) {
             <InputField
                 placeholder="Ingresa tu contraseña"
                 setValor={clave}
-                onChangeText={setClave}
+                setTextChange={setClave}
                 secureTextEntry
             />
             <InputField
                 placeholder="Confirma tu contraseña"
                 setValor={confirmarClave}
-                onChangeText={setConfirmarClave}
+                setTextChange={setConfirmarClave}
                 secureTextEntry
             />
             <TouchableOpacity style={styles.signUpButton} onPress={handleCreate}>

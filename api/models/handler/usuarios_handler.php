@@ -142,6 +142,13 @@ class UsuarioHandler
         $params = array($this->nombre, $this->apellido, $this->correo, $this->dui, $this->telefono, $this->nacimiento, $this->direccion, $this->clave, $this->imagen);
         return Database::executeRow($sql, $params);
     }
+    public function createRowMobile()
+    {
+        $sql = 'INSERT INTO tb_usuarios(nombre_usuario, apellido_usuario, correo_usuario, dui_usuario, telefono_usuario, nacimiento_usuario, direccion_usuario, clave_usuario)
+                VALUES(?, ?, ?, ?, ?, ?, ?, ?)';
+        $params = array($this->nombre, $this->apellido, $this->correo, $this->dui, $this->telefono, $this->nacimiento, $this->direccion, $this->clave);
+        return Database::executeRow($sql, $params);
+    }
 
 
     /*

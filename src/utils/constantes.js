@@ -4,5 +4,5 @@
 //utilizar la direccion IP del servidor y no localhost
 //export const IP = 'http://10.10.0.165';
 //export const IP = 'http://192.168.137.65';
-export const IP = 'http://192.168.9.202';
+export const IP = 'http://192.168.7.202';
 //export const IP = 'http://172.20.10.10';
