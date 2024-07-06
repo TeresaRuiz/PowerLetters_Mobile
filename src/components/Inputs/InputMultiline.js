@@ -1,3 +1,4 @@
+
 import { StyleSheet, Platform, TextInput} from 'react-native';
 
 export default function InputMultiline({placeHolder, setValor, contra, valor}) {
@@ -5,11 +6,11 @@ export default function InputMultiline({placeHolder, setValor, contra, valor}) {
   return (
 
     <TextInput
-    style={[styles.Input, { backgroundColor: '#ffffff', color: '#000000' }]}
-    placeholder="Dirección"
+    style={styles.Input}
+    placeholder={placeHolder}
     value={valor}
     onChangeText={setValor}
-    placeholderTextColor={'#808080'}
+    placeholderTextColor={'gray'}
     secureTextEntry={contra} 
     multiline={true}
     numberOfLines={4}
@@ -20,10 +21,12 @@ export default function InputMultiline({placeHolder, setValor, contra, valor}) {
 
 const styles = StyleSheet.create({
   Input: {
-    fontWeight:'800',
-    width:'100%',
-    borderRadius:10,
-    padding: Platform.OS === 'ios' ? 15 : 10, 
+    backgroundColor:'white',
+    color: "black", 
+    width:"100%",
+    borderRadius:5,
+    padding: Platform.OS === 'ios' ? 15 : 10, // Estilo de la barra de pestañas, altura diferente para iOS y Android,
     marginVertical:10
   },
+
 });

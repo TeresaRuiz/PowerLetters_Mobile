@@ -9,6 +9,7 @@ import InputMultiline from '../components/Inputs/InputMultiline';
 import MaskedInputTelefono from '../components/Inputs/MaskedInputTelefono';
 import MaskedInputDui from '../components/Inputs/MaskedInputDui';
 import InputEmail from '../components/Inputs/InputEmail';
+import RegisterButton from '../components/Buttons/Button';
 
 export default function Registro({ navigation }) {
     const ip = Constantes.IP;
@@ -54,11 +55,36 @@ export default function Registro({ navigation }) {
         showMode('date');
     };
 
+    const handleLogout = async () => {
+        /*
+                try {
+                    const response = await fetch(`${ip}/coffeeshop/api/services/public/cliente.php?action=logOut`, {
+                        method: 'GET'
+                    });
+        
+                    const data = await response.json();
+        
+                    if (data.status) {
+                        navigation.navigate('Sesion');
+                    } else {
+                        console.log(data);
+                        // Alert the user about the error
+                        Alert.alert('Error', data.error);
+                    }
+                } catch (error) {
+                    console.error(error, "Error desde Catch");
+                    Alert.alert('Error', 'Ocurrió un error al iniciar sesión con bryancito');
+                } */
+        navigation.navigate('Registro');
+    };
+
     const handleCreate = async () => {
         try {
+
+            // Calcular la fecha mínima permitida (18 años atrás desde la fecha actual)
             const fechaMinima = new Date();
             fechaMinima.setFullYear(fechaMinima.getFullYear() - 18);
-
+            // Validar los campos
             if (!nombre.trim() || !apellido.trim() || !email.trim() || !direccion.trim() ||
                 !dui.trim() || !fechaNacimiento.trim() || !telefono.trim() || !clave.trim() || !confirmarClave.trim()) {
                 Alert.alert("Debes llenar todos los campos");
@@ -73,6 +99,8 @@ export default function Registro({ navigation }) {
                 Alert.alert('Error', 'Debes tener al menos 18 años para registrarte.');
                 return;
             }
+
+            // Si todos los campos son válidos, proceder con la creación del usuario
             const formData = new FormData();
             formData.append('nombreCliente', nombre);
             formData.append('apellidoCliente', apellido);
@@ -84,15 +112,14 @@ export default function Registro({ navigation }) {
             formData.append('claveCliente', clave);
             formData.append('confirmarClave', confirmarClave);
 
-
-            const response = await fetch(`${ip}/PowerLetters_Mobile/api/services/public/usuario.php?action=signUpMovil`, {
+            const response = await fetch(`${ip}/coffeeshop/api/services/public/cliente.php?action=signUpMovil`, {
                 method: 'POST',
                 body: formData
             });
 
             const data = await response.json();
             if (data.status) {
-                Alert.alert('Datos guardados correctamente');
+                Alert.alert('Datos Guardados correctamente');
                 navigation.navigate('Sesion');
             } else {
                 Alert.alert('Error', data.error);
@@ -102,6 +129,8 @@ export default function Registro({ navigation }) {
         }
     };
 
+
+
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.title}>¡Regístrate!</Text>
@@ -109,40 +138,34 @@ export default function Registro({ navigation }) {
             <Image source={require('../img/registro.png')} style={styles.image} />
 
             <InputField
-                placeholder="Nombre del usuario"
-                ssetValor={nombre}
+                placeHolder='Nombre del usuario'
+                setValor={nombre}
                 setTextChange={setNombre}
             />
             <InputField
-                placeholder="Apellido del usuario"
+                placeHolder='Apellido del usuario'
                 setValor={apellido}
                 setTextChange={setApellido}
             />
             <MaskedInputDui
-                placeholder="Ingresa tu DUI"
-                setValor={dui}
-                setTextChange={setDui}
-            />
+                dui={dui}
+                setDui={setDui} />
             <InputEmail
-                placeholder="Correo del usuario"
+                placeHolder='Correo del usuario'
                 setValor={email}
-                setTextChange={setEmail}
-            />
+                setTextChange={setEmail} />
             <MaskedInputTelefono
-                placeholder="Ingresa tu teléfono"
-                setValor={telefono}
-                setTextChange={setTelefono}
-            />
+                telefono={telefono}
+                setTelefono={setTelefono} />
             <InputMultiline
-                placeholder="Dirección del usuario"
-                setValor={direccion}
-                setTextChange={setDireccion}
-            />
+                placeHolder='Dirección del usuario'
+                setValor={setDireccion}
+                valor={direccion}
+                setTextChange={setDireccion} />
             <View style={styles.contenedorFecha}>
                 <Text style={styles.fecha}>Fecha Nacimiento</Text>
-                <TouchableOpacity onPress={showDatepicker}>
-                    <Text style={styles.fechaSeleccionar}>Seleccionar Fecha:</Text>
-                </TouchableOpacity>
+
+                <TouchableOpacity onPress={showDatepicker}><Text style={styles.fechaSeleccionar}>Seleccionar Fecha:</Text></TouchableOpacity>
                 <Text style={styles.fecha}>Seleccion: {fechaNacimiento}</Text>
 
                 {show && (
@@ -151,27 +174,24 @@ export default function Registro({ navigation }) {
                         value={date}
                         mode={mode}
                         is24Hour={true}
-                        minimumDate={new Date(new Date().getFullYear() - 100, new Date().getMonth(), new Date().getDate())}
-                        maximumDate={new Date()}
+                        minimumDate={new Date(new Date().getFullYear() - 100, new Date().getMonth(), new Date().getDate())} // Fecha mínima permitida (100 años atrás desde la fecha actual)
+                        maximumDate={new Date()} // Fecha máxima permitida (fecha actual)
                         onChange={onChange}
                     />
                 )}
             </View>
             <InputField
-                placeholder="Ingresa tu contraseña"
+                placeHolder='Contraseña'
+                contra={true}
                 setValor={clave}
-                setTextChange={setClave}
-                secureTextEntry
-            />
+                setTextChange={setClave} />
             <InputField
-                placeholder="Confirma tu contraseña"
+                placeHolder='Confirmar contraseña'
+                contra={true}
                 setValor={confirmarClave}
-                setTextChange={setConfirmarClave}
-                secureTextEntry
-            />
-            <TouchableOpacity style={styles.signUpButton} onPress={handleCreate}>
-                <Text style={styles.signUpButtonText}>Registrarse</Text>
-            </TouchableOpacity>
+                setTextChange={setConfirmarClave} />
+
+            <RegisterButton onPress={handleCreate} />
             <Text style={styles.orText}>― O regístrate con ―</Text>
             <View style={styles.socialContainer}>
                 <SocialButton name="google" size={30} color="#DB4437" />

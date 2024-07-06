@@ -2,31 +2,30 @@ import React, { useState } from 'react';
 import { Platform, TextInput, StyleSheet } from 'react-native';
 import { TextInputMask } from 'react-native-masked-text';
 
-export default function MaskedInputTelefono() {
-    const [telefono, setTelefono] = useState('');
-
+export default function MaskedInputTelefono({telefono, setTelefono}) {
     return (
-        <TextInputMask
-            style={styles.input}
-            placeholder="Teléfono del usuario"
-            placeholderTextColor="#A1A1A1"
-            type={'custom'}
-            options={{
-                mask: '9999-9999' // Formato para el número de teléfono
-            }}
-            value={telefono}
-            onChangeText={(text) => setTelefono(text)}
-        />
+            <TextInputMask
+                style={styles.Input}
+                placeholder="Teléfono"
+                placeholderTextColor="gray"
+                type={'custom'}
+                options={{
+                    mask: '9999-9999' // Formato para el número de teléfono
+                }}
+                value={telefono}
+                onChangeText={setTelefono}
+            />
     );
 }
 
 const styles = StyleSheet.create({
-    input: {
-        width: '100%',
-        height: 50,
-        borderRadius: 10,
-        backgroundColor: '#FFFFFF',
-        paddingHorizontal: 20,
-        marginBottom: 20,
+    Input: {
+      backgroundColor:'white',
+      color: "black",
+      width:"100%",
+      borderRadius:5,
+      padding: Platform.OS === 'ios' ? 15 : 10, // Estilo de la barra de pestañas, altura diferente para iOS y Android,
+      marginVertical:10
     },
-})
+  
+  });
