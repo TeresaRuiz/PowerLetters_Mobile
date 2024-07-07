@@ -80,11 +80,11 @@ const HistorialPedidos = ({ navigation }) => {
                     <Text style={styles.emptyText}>No hay pedidos finalizados en el historial.</Text>
                 )}
             />
-           <Buttons
-          textoBoton='Borrar historial'
-          accionBoton={borrarHistorialPedidos}
-          color='#5064d4'
-        />
+            <Buttons
+                textoBoton='Borrar historial'
+                accionBoton={borrarHistorialPedidos}
+                color='#5064d4'
+            />
         </View>
     );
 };
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginTop: 20,
     },
-   
+
     itemHeader: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -144,6 +144,6 @@ const styles = StyleSheet.create({
         marginHorizontal: 8, // Espacio horizontal entre elementos
     },
 });
-     
+
 
 export default HistorialPedidos;
