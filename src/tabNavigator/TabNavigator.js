@@ -8,6 +8,7 @@ import Productos from '../screens/Productos';
 import Home from '../screens/Home';
 import Carrito from '../screens/Carrito';
 import Libros from '../screens/Libros';
+import Historial from '../screens/HistorialPedidos';
 
 const Tab = createBottomTabNavigator();
 
@@ -34,6 +35,8 @@ const TabNavigator = () => {
             iconName = focused ? 'cart' : 'cart-outline';
           } else if (route.name === 'Libros') {
             iconName = focused ? 'book' : 'book-outline';
+          }else if (route.name === 'Historial') {
+            iconName = focused ? 'book' : 'book-outline';
           }
           return <Ionicons name={iconName} color={color} size={size} />;
         },
@@ -53,6 +56,11 @@ const TabNavigator = () => {
         name="Carrito"
         component={Carrito}
         options={{ title: 'Carrito' }}
+      />
+      <Tab.Screen
+        name="Historial"
+        component={Historial}
+        options={{ title: 'Historial' }}
       />
     </Tab.Navigator>
   );

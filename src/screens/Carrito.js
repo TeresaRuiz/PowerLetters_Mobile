@@ -82,18 +82,25 @@ const Carrito = ({ navigation }) => {
 
   const guardarPedidoEnHistorial = async () => {
     try {
-      // Obtener historial de pedidos previo
       const historialPedidos = await AsyncStorage.getItem('historialPedidos');
       let historial = historialPedidos ? JSON.parse(historialPedidos) : [];
-      // Agregar el nuevo pedido al historial
-      historial.push(dataDetalleCarrito);
-      // Guardar el historial actualizado
+
+      // Verificar y formatear datos antes de guardarlos
+      const nuevoPedido = dataDetalleCarrito.map(detalle => ({
+        id: detalle.id_detalle,
+        nombreProducto: detalle.nombre_producto,
+        cantidad: detalle.cantidad_producto || 0, // Asegurarse de que cantidad esté presente
+        precio: detalle.precio_producto || 0 // Asegurarse de que precio esté presente
+      }));
+
+      historial.push(nuevoPedido); // Agregar el carrito actual al historial
       await AsyncStorage.setItem('historialPedidos', JSON.stringify(historial));
+      console.log('Historial guardado correctamente:', historial);
     } catch (error) {
       console.error('Error al guardar en el historial de pedidos:', error);
     }
   };
-  
+
 
   // Función para manejar la modificación de un detalle del carrito
   const handleEditarDetalle = (idDetalle, cantidadDetalle) => {
