@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
   },
   loadingContainer: {
     flex: 1,
-    backgroundColor: '#EAD8C0',
+    backgroundColor: '#f0ecfc',
     alignItems: 'center',
     justifyContent: 'center',
   },

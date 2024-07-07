@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/coffeeshop-splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#EAD8C0"
+      "backgroundColor": "#f0ecfc"
     },
     "assetBundlePatterns": [
       "**/*"
