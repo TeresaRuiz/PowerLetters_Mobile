@@ -64,10 +64,14 @@ const ModalEditarCantidad = ({setModalVisible, modalVisible, idDetalle, setCanti
           <Buttons
             textoBoton='Editar cantidad'
             accionBoton={handleUpdateDetalleCarrito}
+            color='#5064d4'
+            estilo={{ paddingVertical: 15, paddingHorizontal: 30 }}
           />
           <Buttons
             textoBoton='Cancelar'
             accionBoton={handleCancelEditarCarrito}
+            color='#5064d4'
+            estilo={{ paddingVertical: 15, paddingHorizontal: 30 }}
           />
         </View>
       </View>
@@ -109,7 +113,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginBottom: 20,
-    width: 200,
+    width: 300,
   },
   button: {
     backgroundColor: '#007bff',

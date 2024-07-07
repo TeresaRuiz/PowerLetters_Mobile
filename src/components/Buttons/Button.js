@@ -1,8 +1,8 @@
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
-export default function Buttons({ textoBoton, accionBoton, color }) {
+export default function Buttons({ textoBoton, accionBoton, color, estilo }) {
     return (
-        <TouchableOpacity style={[styles.button, { backgroundColor: color }]} onPress={accionBoton}>
+        <TouchableOpacity style={[styles.button, { backgroundColor: color }, estilo]} onPress={accionBoton}>
             <Text style={styles.buttonText}>{textoBoton}</Text>
         </TouchableOpacity>
     );
@@ -22,4 +22,4 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
     },
-})
+});

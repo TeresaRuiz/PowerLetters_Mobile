@@ -1,4 +1,3 @@
-
 import { StatusBar, StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, FlatList, ScrollView, SafeAreaView, Image, Modal } from 'react-native';
 import { useState, useEffect } from 'react';
 import * as Constantes from '../utils/constantes'
@@ -62,6 +61,7 @@ export default function Productos({ navigation }) {
       Alert.alert('Error', 'Ocurrió un error al listar los productos');
     }
   }
+  
 
   const getCategorias = async () => {
     try {

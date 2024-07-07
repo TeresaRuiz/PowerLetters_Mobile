@@ -27,7 +27,7 @@ const ModalCompra = ({ visible, cerrarModal, nombreProductoModal, idProductoModa
             const data = await response.json();
             console.log("data despues del response", data);
             if (data.status) {
-                Alert.alert('Datos Guardados correctamente');
+                Alert.alert('Datos guardados correctamente');
                 cerrarModal(false);
             } else {
                 Alert.alert('Error', data.error);
@@ -40,11 +40,8 @@ const ModalCompra = ({ visible, cerrarModal, nombreProductoModal, idProductoModa
 };
 
   const handleCancelCarrito = () => {
-    // Lógica para agregar al carrito con la cantidad ingresada
     cerrarModal(false)
   };
-  //logica para la compra del producto - agregar el producto al carrito
-
 
   return (
     <Modal
@@ -67,11 +64,17 @@ const ModalCompra = ({ visible, cerrarModal, nombreProductoModal, idProductoModa
             placeholder="Ingrese la cantidad"
           />
           <Buttons
-          textoBoton='Agregar al carrito'
-          accionBoton={() => handleCreateDetail()}/>
-                    <Buttons
-          textoBoton='Cancelar'
-          accionBoton={() => handleCancelCarrito()}/>
+            textoBoton='Agregar al carrito'
+            accionBoton={() => handleCreateDetail()}
+            color='#5064d4'
+            estilo={{ paddingVertical: 15, paddingHorizontal: 30 }} // Ajusta el tamaño del botón
+          />
+          <Buttons
+            textoBoton='Cancelar'
+            accionBoton={() => handleCancelCarrito()}
+            color='#5064d4'
+            estilo={{ paddingVertical: 15, paddingHorizontal: 30 }} // Ajusta el tamaño del botón
+          />
         </View>
       </View>
     </Modal>
@@ -110,20 +113,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginBottom: 20,
-    width: 200,
+    width: 300,
     textAlign: 'center',
-  },
-  button: {
-    backgroundColor: '#007bff',
-    borderRadius: 5,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: 'bold',
   },
 });
 

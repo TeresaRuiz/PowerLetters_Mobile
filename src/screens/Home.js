@@ -69,7 +69,7 @@ export default function Home({ navigation }) {
       <Text style={styles.subtitle}>{nombre ? nombre : 'No hay Nombre para mostrar'}</Text>
       <View style={styles.buttonsContainer}>
         <Buttons textoBoton='Cerrar sesión' accionBoton={handleLogout} color='#5064d4' />
-        <Buttons textoBoton='Ver libros' accionBoton={irActualizar} color='#5064d4' />
+        <Buttons textoBoton='Filtrador de libros' accionBoton={irActualizar} color='#5064d4' />
         <Buttons textoBoton='Editar perfil' accionBoton={EditUser} color='#5064d4' />
 
       </View>

@@ -7,42 +7,47 @@ import { Platform } from 'react-native';
 import Productos from '../screens/Productos';
 import Home from '../screens/Home';
 import Carrito from '../screens/Carrito';
+import Libros from '../screens/Libros';
 
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
-    return (
+  return (
 
-<Tab.Navigator
-          screenOptions={({ route }) => ({
-            headerShown: false, // Oculta el header
-            tabBarActiveTintColor: '#5064d4', // Color de los íconos activos
-            tabBarInactiveTintColor: '#5865E0', // Color de los íconos inactivos
-            tabBarStyle: { backgroundColor: '#FFF', 
-              height: Platform.OS === 'ios' ? 80 : 60, // Estilo de la barra de pestañas, altura diferente para iOS y Android
-           borderTopWidth: 0 }, // Estilo de la barra de pestañas
-            tabBarIcon: ({ focused, color, size }) => { // Función que define el ícono de la pestaña
-              let iconName;
-              if (route.name === 'Home') {
-                iconName = focused ? 'home' : 'home-outline';
-              } else if (route.name === 'Productos') {
-                iconName = focused ? 'book' : 'book-outline';
-              } else if (route.name === 'Carrito') {
-                iconName = focused ? 'cart' : 'cart-outline';
-              }
-              return <Ionicons name={iconName} color={color} size={size} />;
-            },
-          })}
-        >
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        headerShown: false, // Oculta el header
+        tabBarActiveTintColor: '#5064d4', // Color de los íconos activos
+        tabBarInactiveTintColor: '#5865E0', // Color de los íconos inactivos
+        tabBarStyle: {
+          backgroundColor: '#FFF',
+          height: Platform.OS === 'ios' ? 80 : 60, // Estilo de la barra de pestañas, altura diferente para iOS y Android
+          borderTopWidth: 0
+        }, // Estilo de la barra de pestañas
+        tabBarIcon: ({ focused, color, size }) => { // Función que define el ícono de la pestaña
+          let iconName;
+          if (route.name === 'Home') {
+            iconName = focused ? 'home' : 'home-outline';
+          } else if (route.name === 'Productos') {
+            iconName = focused ? 'search' : 'search-outline';
+          } else if (route.name === 'Carrito') {
+            iconName = focused ? 'cart' : 'cart-outline';
+          } else if (route.name === 'Libros') {
+            iconName = focused ? 'book' : 'book-outline';
+          }
+          return <Ionicons name={iconName} color={color} size={size} />;
+        },
+      })}
+    >
       <Tab.Screen
         name="Home"
         component={Home}
         options={{ title: 'Inicio' }}
       />
       <Tab.Screen
-        name="Productos"
-        component={Productos}
-        options={{ title: 'Catálogo de libros' }}
+        name="Libros"
+        component={Libros}
+        options={{ title: 'Libros' }}
       />
       <Tab.Screen
         name="Carrito"
@@ -50,7 +55,7 @@ const TabNavigator = () => {
         options={{ title: 'Carrito' }}
       />
     </Tab.Navigator>
-    );
+  );
 };
 
 export default TabNavigator;

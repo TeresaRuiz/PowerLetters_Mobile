@@ -1,102 +1,65 @@
-import React, { useEffect, useState } from 'react';
-import { Text, TouchableOpacity, View, StyleSheet, FlatList, Alert } from 'react-native';
+import React from 'react';
+import { Text, TouchableOpacity, View, StyleSheet, Alert } from 'react-native';
 import Constants from 'expo-constants';
-import * as Constantes from '../../utils/constantes'
+import * as Constantes from '../../utils/constantes';
 
-const CarritoCard = ({item, cargarCategorias, 
-  modalVisible,
-  setModalVisible,
-  cantidadProductoCarrito,
-  setCantidadProductoCarrito, 
-  accionBotonDetalle,
-  idDetalle,
-  setIdDetalle, getDetalleCarrito, updateDataDetalleCarrito}) => {
+const CarritoCard = ({ item, updateDataDetalleCarrito, accionBotonDetalle }) => {
 
-    const ip = Constantes.IP;
-    //asignar el valor a cantidadproducto carrito que viene 
-  
-/*
-    const handleDeleteDetalleCarrito = async (idDetalle) => {
-      try {
-        const formData = new FormData();
-        formData.append('idDetalle', idDetalle);
-        const response = await fetch(`${ip}/coffeeshop/api/services/public/pedido.php?action=deleteDetail`, {
-          method: 'POST',
-          body: formData
-        });
-        const data = await response.json();
-        if (data.status) {
-          Alert.alert('Datos eliminados correctamente del carrito');
-          // Llamar a la función de actualización para actualizar la lista
-          updateDataDetalleCarrito(prevData => prevData.filter(item => item.id_detalle !== idDetalle));
-        } else {
-          Alert.alert('Error al eliminar del carrito', data.error);
-        }
-      } catch (error) {
-        Alert.alert("Error al eliminar del carrito")
-      }
-    };*/
-    
-    const handleDeleteDetalleCarrito = async (idDetalle) => {
-      try {
-        // Mostrar un mensaje de confirmación antes de eliminar
-        Alert.alert(
-          'Confirmación',
-          '¿Estás seguro de que deseas eliminar este elemento del carrito?',
-          [
-            {
-              text: 'Cancelar',
-              style: 'cancel'
-            },
-            {
-              text: 'Eliminar',
-              onPress: async () => {
-                const formData = new FormData();
-                formData.append('idDetalle', idDetalle);
-                const response = await fetch(`${ip}/coffeeshop/api/services/public/pedido.php?action=deleteDetail`, {
-                  method: 'POST',
-                  body: formData
-                });
-                const data = await response.json();
-                if (data.status) {
-                  Alert.alert('Datos eliminados correctamente del carrito');
-                  // Llamar a la función de actualización para actualizar la lista
-                  updateDataDetalleCarrito(prevData => prevData.filter(item => item.id_detalle !== idDetalle));
-                } else {
-                  Alert.alert('Error al eliminar del carrito', data.error);
-                }
+  const ip = Constantes.IP;
+
+  const handleDeleteDetalleCarrito = async (idDetalle) => {
+    try {
+      Alert.alert(
+        'Confirmación',
+        '¿Estás seguro de que deseas eliminar este elemento del carrito?',
+        [
+          {
+            text: 'Cancelar',
+            style: 'cancel'
+          },
+          {
+            text: 'Eliminar',
+            onPress: async () => {
+              const formData = new FormData();
+              formData.append('idDetalle', idDetalle);
+              const response = await fetch(`${ip}/coffeeshop/api/services/public/pedido.php?action=deleteDetail`, {
+                method: 'POST',
+                body: formData
+              });
+              const data = await response.json();
+              if (data.status) {
+                Alert.alert('Datos eliminados correctamente del carrito');
+                updateDataDetalleCarrito(prevData => prevData.filter(item => item.id_detalle !== idDetalle));
+              } else {
+                Alert.alert('Error al eliminar del carrito', data.error);
               }
             }
-          ]
-        );
-      } catch (error) {
-        Alert.alert("Error al eliminar del carrito")
-      }
-    };
-     
+          }
+        ]
+      );
+    } catch (error) {
+      Alert.alert("Error al eliminar del carrito");
+    }
+  };
 
   return (
     <View style={styles.itemContainer}>
+      <Text style={styles.itemText}>ID: {item.id_detalle}</Text>
+      <Text style={styles.itemText}>Nombre: {item.nombre_producto}</Text>
+      <Text style={styles.itemText}>Precio: ${item.precio_producto}</Text>
+      <Text style={styles.itemText}>Cantidad: {item.cantidad_producto}</Text>
+      <Text style={styles.itemText}>SubTotal: ${(parseFloat(item.cantidad_producto) * parseFloat(item.precio_producto)).toFixed(2)}</Text>
 
-    <Text style={styles.itemText}>ID: {item.id_detalle}</Text>
-    <Text style={styles.itemText}>Nombre: {item.nombre_producto}</Text>
-    <Text style={styles.itemText}>Precio: ${item.precio_producto}</Text>
-    <Text style={styles.itemText}>Cantidad: {item.cantidad_producto}</Text>
-    <Text style={styles.itemText}>SubTotal: ${(parseFloat(item.cantidad_producto)*parseFloat(item.precio_producto)).toFixed(2)}</Text>
+      <TouchableOpacity style={styles.modifyButton}
+        onPress={() => accionBotonDetalle(item.id_detalle, item.cantidad_producto)}>
+        <Text style={styles.buttonText}>Modificar cantidad</Text>
+      </TouchableOpacity>
 
-    <TouchableOpacity style={styles.modifyButton}
-    onPress={()=>accionBotonDetalle(item.id_detalle, item.cantidad_producto)}
-    >
-      <Text style={styles.buttonText}>Modificar Cantidad</Text>
-    </TouchableOpacity>
-
-    <TouchableOpacity style={styles.deleteButton}
-    onLongPress={()=>handleDeleteDetalleCarrito(item.id_detalle)}
-    >
-      <Text style={styles.buttonText}>Eliminar del carrito</Text>
-    </TouchableOpacity>
-  </View>
-
+      <TouchableOpacity style={styles.deleteButton}
+        onPress={() => handleDeleteDetalleCarrito(item.id_detalle)}>
+        <Text style={styles.buttonText}>Eliminar del carrito</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
@@ -114,7 +77,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 16,
-    color: '#5C3D2E', // Brown color for the title
+    color: '#5C3D2E',
   },
   itemContainer: {
     padding: 16,
@@ -138,7 +101,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingVertical: 8,
     paddingHorizontal: 16,
-    backgroundColor: '#8F6B58', // Light brown color for modify button
+    backgroundColor: '#8F6B58',
     marginVertical: 4,
   },
   deleteButton: {
@@ -147,7 +110,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingVertical: 8,
     paddingHorizontal: 16,
-    backgroundColor: '#D2691E', // Darker orange color for delete button
+    backgroundColor: '#D2691E',
     marginVertical: 4,
   },
   buttonText: {
@@ -155,20 +118,4 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
   },
-  finalButton: {
-    backgroundColor: '#A0522D', // Sienna color for final action buttons
-    padding: 16,
-    borderRadius: 8,
-    marginVertical: 8,
-  },
-  finalButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
-  containerButtons:{
-    justifyContent:'center',
-    alignItems:'center', 
-  }
 });

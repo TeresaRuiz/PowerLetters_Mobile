@@ -11,6 +11,8 @@ import * as Constantes from '../utils/constantes';
 import Buttons from '../components/Buttons/Button';
 import CarritoCard from '../components/CarritoCard/CarritoCard';
 import ModalEditarCantidad from '../components/Modales/ModalEditarCantidad';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const Carrito = ({ navigation }) => {
   // Estado para almacenar los detalles del carrito
@@ -66,7 +68,9 @@ const Carrito = ({ navigation }) => {
       const data = await response.json();
       if (data.status) {
         Alert.alert("Se finalizó la compra correctamente")
-        setDataDetalleCarrito([]); // Limpia la lista de detalles del carrito
+        // Guardar el pedido en el historial
+        guardarPedidoEnHistorial(); // Implementar esta función
+        setDataDetalleCarrito([]); // Limpiar la lista de detalles del carrito
         navigation.navigate('TabNavigator', { screen: 'Productos' });
       } else {
         Alert.alert('Error', data.error);
@@ -75,6 +79,21 @@ const Carrito = ({ navigation }) => {
       Alert.alert('Error', 'Ocurrió un error al finalizar pedido');
     }
   };
+
+  const guardarPedidoEnHistorial = async () => {
+    try {
+      // Obtener historial de pedidos previo
+      const historialPedidos = await AsyncStorage.getItem('historialPedidos');
+      let historial = historialPedidos ? JSON.parse(historialPedidos) : [];
+      // Agregar el nuevo pedido al historial
+      historial.push(dataDetalleCarrito);
+      // Guardar el historial actualizado
+      await AsyncStorage.setItem('historialPedidos', JSON.stringify(historial));
+    } catch (error) {
+      console.error('Error al guardar en el historial de pedidos:', error);
+    }
+  };
+  
 
   // Función para manejar la modificación de un detalle del carrito
   const handleEditarDetalle = (idDetalle, cantidadDetalle) => {
@@ -131,13 +150,15 @@ const Carrito = ({ navigation }) => {
       <View style={styles.containerButtons}>
         {dataDetalleCarrito.length > 0 && (
           <Buttons
-            textoBoton='Finalizar Pedido'
+            textoBoton='Finalizar pedido'
             accionBoton={finalizarPedido}
+            color='#4CAF50'
           />
         )}
         <Buttons
           textoBoton='Regresar a productos'
           accionBoton={backProducts}
+          color='#5064d4'
         />
       </View>
     </View>
@@ -150,7 +171,7 @@ export default Carrito;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#EAD8C0',
+    backgroundColor: '#f0ecfc',
     paddingTop: Constants.statusBarHeight,
     paddingHorizontal: 16,
   },
