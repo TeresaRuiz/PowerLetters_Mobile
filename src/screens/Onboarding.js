@@ -3,10 +3,12 @@ import { StyleSheet, View, Text, Animated, Image, TouchableOpacity } from 'react
 import { useNavigation } from '@react-navigation/native';
 
 const Onboarding = () => {
+  // Obtiene una referencia a la función de navegación
   const navigation = useNavigation();
+  // Crea estados para el índice de la diapositiva actual y la animación de la imagen
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [imageAnimation] = useState(new Animated.Value(0));
-  // Función para manejar el cambio de diapositiva
+  // Define un array con información sobre cada diapositiva
   const slides = [
     {
       id: '1',
@@ -27,7 +29,7 @@ const Onboarding = () => {
       image: require('../img/onboarding3.png'),
     },
   ];
-
+  // Efecto para iniciar la animación de la imagen al montar el componente
   useEffect(() => {
     startImageAnimation();
 
@@ -52,9 +54,10 @@ const Onboarding = () => {
       ])
     ).start();
   };
-  //Función para mostrar la siguiente pantalla
+   // Función para manejar el cambio de diapositiva
   const handleNext = () => {
     if (currentSlideIndex < slides.length - 1) {
+      // Incrementa el índice de la diapositiva actual
       setCurrentSlideIndex(currentSlideIndex + 1);
     } else {
       navigation.navigate('Sesion');

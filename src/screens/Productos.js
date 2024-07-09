@@ -34,7 +34,7 @@ export default function Productos({ navigation }) {
   // Función para obtener los libros con su respectiva categoría
   const getProductos = async (idCategoriaSelect = 1) => {
     try {
-      if (idCategoriaSelect <= 0) //validar que vaya seleccionada una categoría de libros
+      if (idCategoriaSelect <= 0) //Validar que vaya seleccionada una categoría de libros
       {
         return
       }
