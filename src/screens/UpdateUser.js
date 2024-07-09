@@ -12,7 +12,7 @@ import { useFocusEffect } from '@react-navigation/native';
 
 export default function UpdateProfile({ navigation }) {
   const ip = Constantes.IP;
-
+  // Declaración de estados
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
@@ -27,15 +27,18 @@ export default function UpdateProfile({ navigation }) {
   const [fechaNacimiento, setFechaNacimiento] = useState('');
   const [clave, setClave] = useState('');
   const [confirmarClave, setConfirmarClave] = useState('');
-
+  // Validar sesión cuando el componente se enfoca
   useFocusEffect(
     React.useCallback(() => {
       validarSesion();
     }, [])
   );
-
+  // Función para validar si el usuario tiene una sesión activa
   const validarSesion = async () => {
     try {
+      // Hacer una petición para validar la sesión
+      // Si la sesión es válida, obtener los datos del usuario
+      // Si no, redirigir al usuario a la pantalla de inicio de sesión
       const response = await fetch(`${ip}/coffeeshop/api/services/public/cliente.php?action=getUser`, {
         method: 'GET'
       });
@@ -52,9 +55,11 @@ export default function UpdateProfile({ navigation }) {
       Alert.alert('Error', 'Ocurrió un error al validar la sesión');
     }
   };
-
+  // Función para obtener los datos del usuario
   const obtenerDatosUsuario = async () => {
     try {
+      // Hacer una petición para obtener los datos del usuario
+      // Actualizar los estados con los datos obtenidos
       const response = await fetch(`${ip}/coffeeshop/api/services/public/cliente.php?action=getClientData`, {
         method: 'GET',
       });
@@ -76,12 +81,12 @@ export default function UpdateProfile({ navigation }) {
       Alert.alert('Ocurrió un error al intentar obtener los datos del usuario');
     }
   };
-
+  // Función para manejar el cambio de fecha en el DateTimePicker
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(false);
     setDate(currentDate);
-
+    // Formatear la fecha seleccionada y actualizarla en el estado
     const year = currentDate.getFullYear();
     const month = String(currentDate.getMonth() + 1).padStart(2, '0');
     const day = String(currentDate.getDate()).padStart(2, '0');
@@ -89,7 +94,7 @@ export default function UpdateProfile({ navigation }) {
     const fechaNueva = `${year}-${month}-${day}`;
     setFechaNacimiento(fechaNueva);
   };
-
+  // Función para mostrar el DateTimePicker
   const showMode = (currentMode) => {
     setShow(true);
     setMode(currentMode);
@@ -98,15 +103,16 @@ export default function UpdateProfile({ navigation }) {
   const showDatepicker = () => {
     showMode('date');
   };
-
+  // Función para manejar la actualización de datos del usuario
   const handleUpdate = async () => {
     try {
+      // Validar que todos los campos estén llenos
       if (!nombre.trim() || !apellido.trim() || !email.trim() || !direccion.trim() ||
         !dui.trim() || !fechaNacimiento.trim() || !telefono.trim() || !clave.trim() || !confirmarClave.trim()) {
         Alert.alert("Debes llenar todos los campos");
         return;
       }
-
+      // Crear un FormData con los datos a enviar
       const formData = new FormData();
       formData.append('idCliente', idCliente);
       formData.append('nombreCliente', nombre);
@@ -118,12 +124,12 @@ export default function UpdateProfile({ navigation }) {
       formData.append('telefonoCliente', telefono);
       formData.append('claveCliente', clave);
       formData.append('confirmarClave', confirmarClave);
-
+      // Hacer una petición para actualizar los datos del usuario
       const response = await fetch(`${ip}/coffeeshop/api/services/public/cliente.php?action=updateClient`, {
         method: 'POST',
         body: formData
       });
-
+      // Si la actualización es exitosa, mostrar un mensaje y navegar a la pantalla anterior
       const data = await response.json();
       if (data.status) {
         Alert.alert('Datos actualizados correctamente');
@@ -132,11 +138,12 @@ export default function UpdateProfile({ navigation }) {
         Alert.alert('Error', data.error);
       }
     } catch (error) {
+      // Si hay un error, mostrar un mensaje de error
       console.error(error);
       Alert.alert('Ocurrió un error al intentar actualizar los datos del usuario');
     }
   };
-
+  // Renderizado del componente
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>¡Actualiza!</Text>
@@ -202,7 +209,7 @@ export default function UpdateProfile({ navigation }) {
     </ScrollView>
   );
 }
-
+// Estilos del componente
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 20,
