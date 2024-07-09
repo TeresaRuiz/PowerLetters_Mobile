@@ -4,7 +4,7 @@
     "slug": "cliente-app-coffeeshop",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/coffee-cup.png",
+    "icon": "./assets/power_letters.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/power_letters.png",
@@ -19,12 +19,12 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/coffee-cup-splash.png",
+        "foregroundImage": "./assets/power_letters.png",
         "backgroundColor": "#f0ecfc"
       }
     },
     "web": {
-      "favicon": "./assets/coffee-cup.png"
+      "favicon": "./assets/power_letters.png"
     }
   }
 }
