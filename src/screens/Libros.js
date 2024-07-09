@@ -46,11 +46,11 @@ export default function Productos({ navigation }) {
       } else {
         console.log("Data en el ELSE error productos", data);
         // Alert the user about the error
-        Alert.alert('Error productos', data.error);
+        Alert.alert('Error libros', data.error);
       }
     } catch (error) {
       console.error(error, "Error desde Catch");
-      Alert.alert('Error', 'Ocurrió un error al listar los productos');
+      Alert.alert('Error', 'Ocurrió un error al listar los libros');
     }
   }
 

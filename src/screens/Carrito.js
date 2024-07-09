@@ -163,7 +163,7 @@ const Carrito = ({ navigation }) => {
           />
         )}
         <Buttons
-          textoBoton='Regresar a productos'
+          textoBoton='Regresar a libros'
           accionBoton={backProducts}
           color='#5064d4'
         />

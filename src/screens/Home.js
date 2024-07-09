@@ -68,9 +68,9 @@ export default function Home({ navigation }) {
       <Text style={styles.title}>¡Bienvenido/a a Power Letters!</Text>
       <Text style={styles.subtitle}>{nombre ? nombre : 'No hay Nombre para mostrar'}</Text>
       <View style={styles.cardsContainer}>
-        <CardButton iconName="log-out-outline" label="Cerrar sesión" onPress={handleLogout} color="#fff" />
-        <CardButton iconName="book-outline" label="Libros" onPress={irActualizar} color="#fff" />
         <CardButton iconName="person-outline" label="Perfil" onPress={EditUser} color="#fff" />
+        <CardButton iconName="book-outline" label="Libros" onPress={irActualizar} color="#fff" />
+        <CardButton iconName="log-out-outline" label="Cerrar sesión" onPress={handleLogout} color="#fff" />
       </View>
     </View>
   );
