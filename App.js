@@ -13,7 +13,11 @@ export default function App() {
 
   return (
     <NavigationContainer>
-       <Stack.Navigator initialRouteName="Onboarding">
+      <Stack.Navigator
+        initialRouteName='Onboarding' // Establece 'Sesion' como la ruta inicial
+        screenOptions={{
+          headerShown: false // Oculta el header por defecto
+        }}>
         <Stack.Screen name="Onboarding" component={Onboarding} options={{ headerShown: false }} />
         <Stack.Screen name="Sesion" component={Sesion} />
         <Stack.Screen name="SignUp" component={SignUp} />
