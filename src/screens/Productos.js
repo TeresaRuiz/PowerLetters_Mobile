@@ -41,7 +41,7 @@ export default function Productos({ navigation }) {
       const formData = new FormData();
       formData.append('idCategoria', idCategoriaSelect);
       //utilizar la direccion IP del servidor y no localhost
-      const response = await fetch(`${ip}/coffeeshop/api/services/public/producto.php?action=readProductosCategoria`, {
+      const response = await fetch(`${ip}/NewPowerLetters/api/services/public/producto.php?action=readProductosCategoria`, {
         method: 'POST',
         body: formData
       });
@@ -67,7 +67,7 @@ export default function Productos({ navigation }) {
     try {
 
       //utilizar la direccion IP del servidor y no localhost
-      const response = await fetch(`${ip}/coffeeshop/api/services/public/categoria.php?action=readAll`, {
+      const response = await fetch(`${ip}/NewPowerLetters/api/services/public/categoria.php?action=readAll`, {
         method: 'GET',
       });
 

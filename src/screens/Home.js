@@ -10,7 +10,7 @@ export default function Home({ navigation }) {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch(`${ip}/coffeeshop/api/services/public/cliente.php?action=logOut`, {
+      const response = await fetch(`${ip}/NewPowerLetters/api/services/public/cliente.php?action=logOut`, {
         method: 'GET'
       });
       const data = await response.json();
@@ -34,7 +34,7 @@ export default function Home({ navigation }) {
 
   const getUser = async () => {
     try {
-      const response = await fetch(`${ip}/coffeeshop/api/services/public/cliente.php?action=getUser`, {
+      const response = await fetch(`${ip}/NewPowerLetters/api/services/public/cliente.php?action=getUser`, {
         method: 'GET'
       });
       const data = await response.json();

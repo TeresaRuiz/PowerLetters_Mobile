@@ -34,7 +34,7 @@ export default function Productos({ navigation }) {
   //getCategorias Funcion para consultar por medio de una peticion GET los datos de la tabla categoria que se encuentran en la base de datos
   const getProductos = async () => {
     try {
-      const response = await fetch(`${ip}/coffeeshop/api/services/public/producto.php?action=readAll`, {
+      const response = await fetch(`${ip}/NewPowerLetters/api/services/public/producto.php?action=readAll`, {
         method: 'GET',
       });
 

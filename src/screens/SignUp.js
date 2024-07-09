@@ -3,7 +3,7 @@ import { useState } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as Constantes from '../utils/constantes'
 import Constants from 'expo-constants';
-//Import de componentes
+// Importación de componentes personalizados
 import Input from '../components/Inputs/Input'
 import InputMultiline from '../components/Inputs/InputMultiline'
 import Buttons from '../components/Buttons/Button';
@@ -15,7 +15,7 @@ import SocialButton from '../components/Inputs/SocialButton';
 
 export default function SignUp({ navigation }) {
     const ip = Constantes.IP;
-
+    // Declaración de estados
     const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
@@ -60,14 +60,16 @@ export default function SignUp({ navigation }) {
     // Código para manejar el registro del usuario
     const handleCreate = async () => {
         try {
+            // Validar que el usuario sea mayor de 18 años
             const fechaMinima = new Date();
             fechaMinima.setFullYear(fechaMinima.getFullYear() - 18);
-
+            // Validar que todos los campos estén llenos
             if (!nombre.trim() || !apellido.trim() || !email.trim() || !direccion.trim() ||
                 !dui.trim() || !fechaNacimiento.trim() || !telefono.trim() || !clave.trim() || !confirmarClave.trim()) {
                 Alert.alert("Debes llenar todos los campos");
                 return;
             } else if (!duiRegex.test(dui)) {
+                // Validar el formato del DUI y el teléfono
                 Alert.alert("El DUI debe tener el formato correcto (########-#)");
                 return;
             } else if (!telefonoRegex.test(telefono)) {
@@ -77,7 +79,7 @@ export default function SignUp({ navigation }) {
                 Alert.alert('Error', 'Debes tener al menos 18 años para registrarte.');
                 return;
             }
-
+            // Crear un FormData con los datos a enviar
             const formData = new FormData();
             formData.append('nombreCliente', nombre);
             formData.append('apellidoCliente', apellido);
@@ -88,8 +90,8 @@ export default function SignUp({ navigation }) {
             formData.append('telefonoCliente', telefono);
             formData.append('claveCliente', clave);
             formData.append('confirmarClave', confirmarClave);
-
-            const response = await fetch(`${ip}/coffeeshop/api/services/public/cliente.php?action=signUpMovil`, {
+            // Hacer una petición para registrar al usuario
+            const response = await fetch(`${ip}/NewPowerLetters/api/services/public/cliente.php?action=signUpMovil`, {
                 method: 'POST',
                 body: formData
             });
@@ -169,7 +171,7 @@ export default function SignUp({ navigation }) {
             <Buttons
                 textoBoton='Registrate'
                 accionBoton={handleCreate}
-                color='#FF6F61' 
+                color='#FF6F61'
             />
             <Text style={styles.orText}>― O regístrate con ―</Text>
             <View style={styles.socialContainer}>

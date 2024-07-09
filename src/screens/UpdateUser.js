@@ -59,10 +59,10 @@ export default function UpdateProfile({ navigation }) {
   const obtenerDatosUsuario = async () => {
     try {
       // Hacer una petición para obtener los datos del usuario
-      // Actualizar los estados con los datos obtenidos
       const response = await fetch(`${ip}/coffeeshop/api/services/public/cliente.php?action=getClientData`, {
         method: 'GET',
       });
+      // Actualizar los estados con los datos obtenidos
       const data = await response.json();
       if (data.status) {
         setIdCliente(data.data.id_cliente);
