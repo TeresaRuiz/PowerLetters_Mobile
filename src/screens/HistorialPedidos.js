@@ -70,7 +70,7 @@ const HistorialPedidos = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Historial de Pedidos</Text>
+            <Text style={styles.title}>Historial de pedidos</Text>
             <FlatList
                 data={historialPedidos}
                 renderItem={renderItem}

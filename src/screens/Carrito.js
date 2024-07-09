@@ -140,7 +140,7 @@ const Carrito = ({ navigation }) => {
       />
 
       {/* Título de la pantalla */}
-      <Text style={styles.title}>Carrito de Compras</Text>
+      <Text style={styles.title}>Carrito de compras</Text>
 
       {/* Lista de detalles del carrito */}
       {dataDetalleCarrito.length > 0 ? (
