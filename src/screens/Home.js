@@ -7,7 +7,7 @@ export default function Home({ navigation }) {
   const [nombre, setNombre] = useState(null);
   const [loading, setLoading] = useState(true);
   const ip = Constantes.IP;
-
+  //Función para cerrar la sesión
   const handleLogout = async () => {
     try {
       const response = await fetch(`${ip}/NewPowerLetters/api/services/public/cliente.php?action=logOut`, {
@@ -23,15 +23,15 @@ export default function Home({ navigation }) {
       Alert.alert('Error', 'Ocurrió un error al cerrar la sesión');
     }
   };
-
+  //Función para ir a la pantalla de productos
   const irActualizar = () => {
     navigation.navigate('Productos');
   };
-
+  //función para ir a la pantalla de actualizar
   const EditUser = () => {
     navigation.navigate('UpdateUser');
   };
-
+  //función para obtener el usuario
   const getUser = async () => {
     try {
       const response = await fetch(`${ip}/NewPowerLetters/api/services/public/cliente.php?action=getUser`, {
@@ -75,7 +75,7 @@ export default function Home({ navigation }) {
     </View>
   );
 }
-
+//Estilo del componente
 const styles = StyleSheet.create({
   container: {
     flex: 1,

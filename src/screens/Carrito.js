@@ -26,7 +26,7 @@ const Carrito = ({ navigation }) => {
   // IP del servidor
   const ip = Constantes.IP;
 
-  // Función para navegar hacia atrás a la pantalla de productos
+  // Función para navegar hacia atrás a la pantalla de libros (productos)
   const backProducts = () => {
     navigation.navigate('Productos');
   };
@@ -79,7 +79,7 @@ const Carrito = ({ navigation }) => {
       Alert.alert('Error', 'Ocurrió un error al finalizar pedido');
     }
   };
-
+  // Función para guardar el pedido
   const guardarPedidoEnHistorial = async () => {
     try {
       const historialPedidos = await AsyncStorage.getItem('historialPedidos');

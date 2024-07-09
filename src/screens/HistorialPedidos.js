@@ -7,7 +7,7 @@ import Buttons from '../components/Buttons/Button';
 
 const HistorialPedidos = ({ navigation }) => {
     const [historialPedidos, setHistorialPedidos] = useState([]);
-
+    //Función para obtener el historial
     useFocusEffect(
         React.useCallback(() => {
             obtenerHistorialPedidos();
@@ -15,6 +15,7 @@ const HistorialPedidos = ({ navigation }) => {
     );
     const borrarHistorialPedidos = async () => {
         try {
+            //Función para borrar el historial
             await AsyncStorage.removeItem('historialPedidos');
             setHistorialPedidos([]);
             console.log('Historial de pedidos borrado');
@@ -25,6 +26,7 @@ const HistorialPedidos = ({ navigation }) => {
 
     const obtenerHistorialPedidos = async () => {
         try {
+            //Función para obtener el historial de pedidos
             const historial = await AsyncStorage.getItem('historialPedidos');
             if (historial !== null) {
                 const pedidos = JSON.parse(historial).map(pedido =>
@@ -65,9 +67,7 @@ const HistorialPedidos = ({ navigation }) => {
 
         );
     };
-
-
-
+    //Aparecera en la pantalla en dado caso no hayan pedidos
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Historial de pedidos</Text>
@@ -88,7 +88,7 @@ const HistorialPedidos = ({ navigation }) => {
         </View>
     );
 };
-
+//Elementos del componente
 const styles = StyleSheet.create({
     container: {
         flex: 1,
