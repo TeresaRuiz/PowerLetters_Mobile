@@ -1,31 +1,57 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Text, Animated, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const Onboarding = () => {
   const navigation = useNavigation();
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const [imageAnimation] = useState(new Animated.Value(0));
 
   const slides = [
     {
       id: '1',
       title: 'Encuentra tus libros favoritos',
       description: 'Accede a una amplia variedad de libros y encuentra tus favoritos fácilmente en Power Letters',
-      image: require('../img/onboarding1.png'), // Actualiza con la imagen adecuada
+      image: require('../img/onboarding1.png'),
     },
     {
       id: '2',
       title: 'Compra fácil y seguro',
       description: 'Compra tus libros de manera segura y conveniente',
-      image: require('../img/onboarding2.png'), // Actualiza con la imagen adecuada
+      image: require('../img/onboarding2.png'),
     },
     {
       id: '3',
       title: 'Entrega rápida y segura',
       description: 'Recibe tus libros en la comodidad de tu hogar de manera segura y oportuna',
-      image: require('../img/onboarding3.png'), // Actualiza con la imagen adecuada
+      image: require('../img/onboarding3.png'),
     },
   ];
+
+  useEffect(() => {
+    startImageAnimation();
+
+    return () => {
+      imageAnimation.stopAnimation();
+    };
+  }, []);
+
+  const startImageAnimation = () => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(imageAnimation, {
+          toValue: 1,
+          duration: 2000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(imageAnimation, {
+          toValue: 0,
+          duration: 2000,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  };
 
   const handleNext = () => {
     if (currentSlideIndex < slides.length - 1) {
@@ -41,9 +67,37 @@ const Onboarding = () => {
     }
   };
 
+  const AnimatedImage = Animated.createAnimatedComponent(Image);
+
   const renderSlide = (slide) => (
     <View style={styles.slide} key={slide.id}>
-      <Image source={slide.image} style={styles.image} />
+      <Animated.View
+        style={[
+          styles.imageContainer,
+          {
+            transform: [
+              {
+                scale: imageAnimation.interpolate({
+                  inputRange: [0, 0.5, 1],
+                  outputRange: [1, 1.1, 1],
+                }),
+              },
+              {
+                rotate: imageAnimation.interpolate({
+                  inputRange: [0, 0.5, 1],
+                  outputRange: ['0deg', '5deg', '0deg'],
+                }),
+              },
+            ],
+            opacity: imageAnimation.interpolate({
+              inputRange: [0, 0.5, 1],
+              outputRange: [1, 0.7, 1],
+            }),
+          },
+        ]}
+      >
+        <AnimatedImage source={slide.image} style={styles.image} />
+      </Animated.View>
       <Text style={styles.title}>{slide.title}</Text>
       <Text style={styles.description}>{slide.description}</Text>
       <View style={styles.navigationButtons}>
@@ -78,10 +132,12 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#f0ecfc',
   },
+  imageContainer: {
+    marginBottom: 40,
+  },
   image: {
     width: 350,
     height: 350,
-    marginBottom: 40,
     resizeMode: 'contain',
   },
   title: {
