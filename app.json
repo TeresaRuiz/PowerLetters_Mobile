@@ -7,7 +7,7 @@
     "icon": "./assets/coffee-cup.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/coffeeshop-splash.png",
+      "image": "./assets/power_letters.png",
       "resizeMode": "contain",
       "backgroundColor": "#f0ecfc"
     },
@@ -20,7 +20,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/coffee-cup-splash.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#f0ecfc"
       }
     },
     "web": {
