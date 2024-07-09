@@ -22,8 +22,8 @@ export default function ProductoCard({
       </View>
       <View style={styles.infoContainer}>
         <Text style={styles.text}>#{idProducto}</Text>
-        <Text style={styles.textTitle}>Título: {nombreProducto}</Text>
-        <Text style={styles.text}>Descripción: {descripcionProducto}</Text>
+        <Text style={styles.textTitle}>Título: <Text style={styles.textDentro}>{nombreProducto}</Text></Text>
+        <Text style={styles.textTitle}>Descripción: <Text style={styles.textDentro}>{descripcionProducto}</Text></Text>
         <Text style={styles.textTitle}>Precio: <Text style={styles.textDentro}>${precioProducto}</Text></Text>
         <Text style={styles.textTitle}>Existencias: <Text style={styles.textDentro}>{existenciasProducto} {(existenciasProducto === 1) ? 'Unidad' : 'Unidades'}</Text></Text>
         <TouchableOpacity
