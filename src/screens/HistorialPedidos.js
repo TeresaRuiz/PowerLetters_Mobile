@@ -44,7 +44,7 @@ const HistorialPedidos = ({ navigation }) => {
 
     const renderItem = ({ item, index }) => {
         const total = item.reduce((sum, pedido) => {
-            const subtotal = (pedido.precio || 0) * (pedido.cantidad || 0);
+            const subtotal = (pedido.precio_producto || 0) * (pedido.cantidad_producto || 0);
             return sum + subtotal;
         }, 0);
 
@@ -57,8 +57,8 @@ const HistorialPedidos = ({ navigation }) => {
                 {item.map((detalle, i) => (
                     <View key={i} style={styles.itemDetails}>
                         <Text style={styles.itemText}>Libro: {detalle.nombre_producto}</Text>
-                        <Text style={styles.itemText}>Cantidad: {detalle.cantidad}</Text>
-                        <Text style={styles.itemText}>Precio: ${detalle.precio}</Text>
+                        <Text style={styles.itemText}>Cantidad: {detalle.cantidad_producto}</Text>
+                        <Text style={styles.itemText}>Precio: ${detalle.precio_producto}</Text>
                     </View>
                 ))}
             </View>
