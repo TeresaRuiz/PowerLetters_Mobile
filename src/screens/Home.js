@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Alert, Image, ActivityIndicator } from 'react-native';
-import Buttons from '../components/Buttons/Button';
+import CardButton from '../components/HomeCards/CardButton';
 import * as Constantes from '../utils/constantes';
 
 export default function Home({ navigation }) {
@@ -67,11 +67,10 @@ export default function Home({ navigation }) {
       <Image source={require('../img/inicio.png')} style={styles.image} />
       <Text style={styles.title}>¡Bienvenido/a a Power Letters!</Text>
       <Text style={styles.subtitle}>{nombre ? nombre : 'No hay Nombre para mostrar'}</Text>
-      <View style={styles.buttonsContainer}>
-        <Buttons textoBoton='Cerrar sesión' accionBoton={handleLogout} color='#5064d4' />
-        <Buttons textoBoton='Filtrador de libros' accionBoton={irActualizar} color='#5064d4' />
-        <Buttons textoBoton='Editar perfil' accionBoton={EditUser} color='#5064d4' />
-
+      <View style={styles.cardsContainer}>
+        <CardButton iconName="log-out-outline" label="Cerrar sesión" onPress={handleLogout} color="#fff" />
+        <CardButton iconName="book-outline" label="Libros" onPress={irActualizar} color="#fff" />
+        <CardButton iconName="person-outline" label="Perfil" onPress={EditUser} color="#fff" />
       </View>
     </View>
   );
@@ -110,8 +109,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     color: '#5C3D2E',
   },
-  buttonsContainer: {
+  cardsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     width: '100%',
-    alignItems: 'center',
   },
 });
