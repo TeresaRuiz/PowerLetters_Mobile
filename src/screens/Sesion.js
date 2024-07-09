@@ -15,24 +15,25 @@ export default function Sesion({ navigation }) {
   const [usuario, setUsuario] = useState('')
   const [contrasenia, setContrasenia] = useState('')
 
-  // Efecto para cargar los detalles del carrito al cargar la pantalla o al enfocarse en ella
+  // Efecto para validar la sesión al cargar la pantalla o al enfocarse en ella
   useFocusEffect(
     // La función useFocusEffect ejecuta un efecto cada vez que la pantalla se enfoca.
     React.useCallback(() => {
-      validarSesion(); // Llama a la función getDetalleCarrito.
+      validarSesion(); // Llama a la función validarSesion.
     }, [])
   );
 
   const validarSesion = async () => {
     try {
+      // Hace una petición para validar si hay una sesión activa
       const response = await fetch(`${ip}/NewPowerLetters/api/services/public/cliente.php?action=getUser`, {
         method: 'GET'
       });
-  
+
       const data = await response.json();
-  
+
       if (data.status === 1) {
-        navigation.navigate('TabNavigator');
+        navigation.navigate('TabNavigator'); // Si hay una sesión activa, navega a la pantalla principal
         console.log("Se ingresa con la sesión activa")
       } else {
         console.log("No hay sesión activa")
@@ -46,6 +47,7 @@ export default function Sesion({ navigation }) {
 
   const cerrarSesion = async () => {
     try {
+      // Hace una petición para cerrar la sesión
       const response = await fetch(`${ip}/NewPowerLetters/api/services/public/cliente.php?action=logOut`, {
         method: 'GET'
       });
@@ -64,16 +66,18 @@ export default function Sesion({ navigation }) {
   }
 
   const handlerLogin = async () => {
+    // Valida que se hayan ingresado el correo y la contraseña
     if (!usuario || !contrasenia) {
       Alert.alert('Error', 'Por favor ingrese su correo y contraseña');
       return;
     }
 
     try {
+      // Crea un FormData con los datos de inicio de sesión
       const formData = new FormData();
       formData.append('correo', usuario);
       formData.append('clave', contrasenia);
-
+      // Hace una petición para iniciar sesión
       const response = await fetch(`${ip}/NewPowerLetters/api/services/public/cliente.php?action=logIn`, {
         method: 'POST',
         body: formData
@@ -82,6 +86,7 @@ export default function Sesion({ navigation }) {
       const data = await response.json();
 
       if (data.status) {
+        // Si el inicio de sesión es exitoso, limpia los campos y navega a la pantalla principal
         setContrasenia('')
         setUsuario('')
         navigation.navigate('TabNavigator');
@@ -96,6 +101,7 @@ export default function Sesion({ navigation }) {
   };
 
   const irRegistrar = async () => {
+    // Navega a la pantalla de registro
     navigation.navigate('SignUp');
   };
 
@@ -103,39 +109,46 @@ export default function Sesion({ navigation }) {
 
   return (
     <View style={styles.container}>
+       {/* Muestra el logo de la aplicación */}
       <Image source={require('../img/logo_blanco.png')} style={styles.image} />
       <Text style={styles.title}>¡Hola de nuevo!</Text>
       <Text style={styles.subtitle}>Bienvenido a Power Letters</Text>
+      {/* Campo de correo electrónico */}
       <InputEmail
         placeHolder='Ingresa tu correo electrónico'
         setValor={usuario}
         setTextChange={setUsuario}
       />
+       {/* Campo de contraseña */}
       <Input
         placeHolder='Ingresa tu contraseña'
         setValor={contrasenia}
         setTextChange={setContrasenia}
         contra={isContra}
       />
+      {/* Enlace para recuperar la contraseña */}
       <Text style={styles.recoveryText}>Recuerda tu contraseña</Text>
       <Buttons
         textoBoton='Iniciar sesión'
-        accionBoton={handlerLogin} 
-        color='#FF6F61' 
+        accionBoton={handlerLogin}
+        color='#FF6F61'
       />
+      {/* Texto separador para las opciones de inicio de sesión con redes sociales */}
       <Text style={styles.orText}>― O continua con ―</Text>
+      {/* Contenedor para los botones de redes sociales */}
       <View style={styles.socialContainer}>
         <SocialButton name="google" size={30} color="#DB4437" />
         <SocialButton name="apple" size={30} color="#000000" />
         <SocialButton name="facebook" size={30} color="#3B5998" />
       </View>
+      {/* Enlace para navegar a la pantalla de registro */}
       <TouchableOpacity onPress={irRegistrar}>
         <Text style={styles.signUpText}>¿No tienes una cuenta? Regístrate</Text>
       </TouchableOpacity>
     </View>
   );
 }
-
+// Estilos del componente
 const styles = StyleSheet.create({
   container: {
     flex: 1,

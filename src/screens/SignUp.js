@@ -110,38 +110,46 @@ export default function SignUp({ navigation }) {
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
+            {/* Título y subtítulo del formulario */}
             <Text style={styles.title}>¡Regístrate!</Text>
             <Text style={styles.subtitle}>Crea tu cuenta en Power Letters</Text>
+            {/* Imagen de registro */}
             <Image source={require('../img/registro.png')} style={styles.image} />
-
+            {/* Campo de nombre de usuario */}
             <Input
                 placeHolder='Nombre del usuario'
                 setValor={nombre}
                 setTextChange={setNombre}
             />
+            {/* Campo de apellido de usuario */}
             <Input
                 placeHolder='Apellido del usuario'
                 setValor={apellido}
                 setTextChange={setApellido}
             />
+            {/* Campo de correo electrónico */}
             <InputEmail
                 placeHolder='Correo del usuario'
                 setValor={email}
                 setTextChange={setEmail} />
+            {/* Campo de dirección */}
             <InputMultiline
                 placeHolder='Dirección del usuario'
                 setValor={setDireccion}
                 valor={direccion}
                 setTextChange={setDireccion} />
+            {/* Campo de DUI */}
             <MaskedInputDui
                 dui={dui}
                 setDui={setDui} />
+            {/* Sección para seleccionar la fecha de nacimiento */}
             <View style={styles.contenedorFecha}>
                 <Text style={styles.fecha}>Fecha Nacimiento</Text>
-
+                {/* Botón para abrir el DateTimePicker */}
                 <TouchableOpacity onPress={showDatepicker}><Text style={styles.fechaSeleccionar}>Seleccionar Fecha:</Text></TouchableOpacity>
+                {/* Muestra la fecha seleccionada */}
                 <Text style={styles.fecha}>Selección: {fechaNacimiento}</Text>
-
+                {/* Muestra el DateTimePicker si show es true */}
                 {show && (
                     <DateTimePicker
                         testID="dateTimePicker"
@@ -154,38 +162,44 @@ export default function SignUp({ navigation }) {
                     />
                 )}
             </View>
+            {/* Campo de número de teléfono */}
             <MaskedInputTelefono
                 telefono={telefono}
                 setTelefono={setTelefono} />
+            {/* Campo de contraseña */}
             <Input
                 placeHolder='Contraseña'
                 contra={true}
                 setValor={clave}
                 setTextChange={setClave} />
+            {/* Campo de confirmación de contraseña */}
             <Input
                 placeHolder='Confirmar contraseña'
                 contra={true}
                 setValor={confirmarClave}
                 setTextChange={setConfirmarClave} />
-
+            {/* Botón de registro */}
             <Buttons
                 textoBoton='Registrate'
                 accionBoton={handleCreate}
                 color='#FF6F61'
             />
+            {/* Texto separador para las opciones de registro con redes sociales */}
             <Text style={styles.orText}>― O regístrate con ―</Text>
+            {/* Contenedor para los botones de redes sociales */}
             <View style={styles.socialContainer}>
                 <SocialButton name="google" size={30} color="#DB4437" />
                 <SocialButton name="apple" size={30} color="#000000" />
                 <SocialButton name="facebook" size={30} color="#3B5998" />
             </View>
+            {/* Enlace para navegar a la pantalla de inicio de sesión */}
             <TouchableOpacity onPress={() => navigation.navigate('Sesion')}>
                 <Text style={styles.signInText}>¿Ya tienes una cuenta? Inicia sesión</Text>
             </TouchableOpacity>
         </ScrollView>
     );
 }
-
+// Estilos del componente
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,

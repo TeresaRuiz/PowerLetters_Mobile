@@ -6,7 +6,7 @@ const Onboarding = () => {
   const navigation = useNavigation();
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [imageAnimation] = useState(new Animated.Value(0));
-
+  // Función para manejar el cambio de diapositiva
   const slides = [
     {
       id: '1',
@@ -52,7 +52,7 @@ const Onboarding = () => {
       ])
     ).start();
   };
-
+  //Función para mostrar la siguiente pantalla
   const handleNext = () => {
     if (currentSlideIndex < slides.length - 1) {
       setCurrentSlideIndex(currentSlideIndex + 1);
@@ -60,13 +60,13 @@ const Onboarding = () => {
       navigation.navigate('Sesion');
     }
   };
-
+  //Función para regresar a la siguiente pantalla
   const handleBack = () => {
     if (currentSlideIndex > 0) {
       setCurrentSlideIndex(currentSlideIndex - 1);
     }
   };
-
+  //Función para crear un componente animado
   const AnimatedImage = Animated.createAnimatedComponent(Image);
 
   const renderSlide = (slide) => (
@@ -119,7 +119,7 @@ const Onboarding = () => {
     </View>
   );
 };
-
+// Estilos del componente
 const styles = StyleSheet.create({
   container: {
     flex: 1,

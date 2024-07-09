@@ -20,53 +20,53 @@ export default function Productos({ navigation }) {
   const [nombreProductoModal, setNombreProductoModal] = useState('')
 
   const volverInicio = async () => {
-
+    // Función para navegar a la pantalla de inicio
     navigation.navigate('Home');
 
   };
-
+  // Función para manejar la compra de un libro
   const handleCompra = (nombre, id) => {
     setModalVisible(true)
     setIdProductoModal(id)
     setNombreProductoModal(nombre)
   }
 
-  //getCategorias Funcion para consultar por medio de una peticion GET los datos de la tabla categoria que se encuentran en la base de datos
+  // Función para obtener los libros con su respectiva categoría
   const getProductos = async (idCategoriaSelect = 1) => {
     try {
-      if (idCategoriaSelect <= 0) //validar que vaya seleccionada una categoria de productos
+      if (idCategoriaSelect <= 0) //validar que vaya seleccionada una categoría de libros
       {
         return
       }
       const formData = new FormData();
       formData.append('idCategoria', idCategoriaSelect);
-      //utilizar la direccion IP del servidor y no localhost
+      //Fetch para llamar del servidor la lectura de categorías por su libro
       const response = await fetch(`${ip}/NewPowerLetters/api/services/public/producto.php?action=readProductosCategoria`, {
         method: 'POST',
         body: formData
       });
 
       const data = await response.json();
-      console.log("data al obtener productos  \n", data)
+      console.log("data al obtener los libros  \n", data)
       if (data.status) {
         console.log("trae datos el dataset", data)
         setDataProductos(data.dataset)
       } else {
-        console.log("Data en el ELSE error productos", data);
-        // Alert the user about the error
+        console.log("Data en el ELSE error libros", data);
+        // Alerta para el usuario al suceder un error
         Alert.alert('Error productos', data.error);
       }
     } catch (error) {
       console.error(error, "Error desde Catch");
-      Alert.alert('Error', 'Ocurrió un error al listar los productos');
+      Alert.alert('Error', 'Ocurrió un error al listar los libros');
     }
   }
-  
+
 
   const getCategorias = async () => {
     try {
 
-      //utilizar la direccion IP del servidor y no localhost
+      //fetch para leer las categorías desde el servidor
       const response = await fetch(`${ip}/NewPowerLetters/api/services/public/categoria.php?action=readAll`, {
         method: 'GET',
       });
@@ -76,14 +76,15 @@ export default function Productos({ navigation }) {
         setDataCategorias(data.dataset)
       } else {
         console.log(data);
-        // Alert the user about the error
-        Alert.alert('Error categorias', data.error);
+        // Alerta para el usuario al suceder un error
+        Alert.alert('Error categorías', data.error);
       }
     } catch (error) {
-      Alert.alert('Error', 'Ocurrió un error al listar las categorias');
+      Alert.alert('Error', 'Ocurrió un error al listar las categorías');
     }
   }
 
+  //Función para seleccionar las categorías
   const handleCategoriaChange = (itemValue, itemIndex) => {
     setSelectedCategoria(itemValue);
   };
@@ -94,16 +95,14 @@ export default function Productos({ navigation }) {
     getProductos();
     getCategorias();
   }, []);
-
+  //Función para ir al carrito
   const irCarrito = () => {
     navigation.navigate('Carrito')
   }
 
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Catálogo de libros</Text>
-
       <ModalCompra
         visible={modalVisible}
         cerrarModal={setModalVisible}
@@ -114,7 +113,7 @@ export default function Productos({ navigation }) {
       />
       <View>
         <Text style={styles.subtitle}>
-          Selecciona una categoría para filtrar productos
+          Selecciona una categoría para filtrar los libros
         </Text>
         <View style={styles.pickerContainer}>
           <RNPickerSelect
@@ -132,7 +131,7 @@ export default function Productos({ navigation }) {
         <FlatList
           data={dataProductos}
           keyExtractor={(item) => item.id_producto}
-          renderItem={({ item }) => ( // Util izamos destructuración para obtener directamente el item
+          renderItem={({ item }) => ( // Utilizamos destructuración para obtener directamente el item
             <ProductoCard ip={ip}
               imagenProducto={item.imagen_producto}
               idProducto={item.id_producto}
@@ -156,7 +155,7 @@ export default function Productos({ navigation }) {
     </View>
   );
 }
-
+// Estilos del componente
 const styles = StyleSheet.create({
   containerFlat: {
     flex: 1,
@@ -257,16 +256,16 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginVertical: 5,
     marginHorizontal: 5,
-    color: '#5C3D2E', // Brown color for the title
+    color: '#5C3D2E', 
   },
   pickerContainer: {
     borderWidth: 1,
-    borderColor: '#5064d4', // Color del borde
+    borderColor: '#5064d4', 
     borderRadius: 5,
     paddingHorizontal: 10,
     paddingVertical: 5,
     marginBottom: 10,
-    backgroundColor: '#5064d4', // Color de fondo
+    backgroundColor: '#5064d4',
   },
   picker: {
     color: '#FFFFFF'
