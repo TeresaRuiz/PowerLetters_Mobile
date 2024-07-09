@@ -39,7 +39,7 @@ export default function UpdateProfile({ navigation }) {
       // Hacer una petición para validar la sesión
       // Si la sesión es válida, obtener los datos del usuario
       // Si no, redirigir al usuario a la pantalla de inicio de sesión
-      const response = await fetch(`${ip}/coffeeshop/api/services/public/cliente.php?action=getUser`, {
+      const response = await fetch(`${ip}/NewPowerLetters/api/services/public/cliente.php?action=getUser`, {
         method: 'GET'
       });
       const data = await response.json();
@@ -59,7 +59,7 @@ export default function UpdateProfile({ navigation }) {
   const obtenerDatosUsuario = async () => {
     try {
       // Hacer una petición para obtener los datos del usuario
-      const response = await fetch(`${ip}/coffeeshop/api/services/public/cliente.php?action=getClientData`, {
+      const response = await fetch(`${ip}/NewPowerLetters/api/services/public/cliente.php?action=getClientData`, {
         method: 'GET',
       });
       // Actualizar los estados con los datos obtenidos
@@ -125,7 +125,7 @@ export default function UpdateProfile({ navigation }) {
       formData.append('claveCliente', clave);
       formData.append('confirmarClave', confirmarClave);
       // Hacer una petición para actualizar los datos del usuario
-      const response = await fetch(`${ip}/coffeeshop/api/services/public/cliente.php?action=updateClient`, {
+      const response = await fetch(`${ip}/NewPowerLetters/api/services/public/cliente.php?action=updateClient`, {
         method: 'POST',
         body: formData
       });
