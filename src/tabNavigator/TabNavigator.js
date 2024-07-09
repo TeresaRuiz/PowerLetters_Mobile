@@ -49,7 +49,7 @@ const TabNavigator = () => {
             } else if (route.name === 'Libros') {
               iconName = focused ? 'book' : 'book-outline';
             } else if (route.name === 'Historial') {
-              iconName = focused ? 'book' : 'book-outline';
+              iconName = focused ? 'document-text' : 'document-text-outline';
             }
             return <Ionicons name={iconName} color={color} size={size} />;
           },
