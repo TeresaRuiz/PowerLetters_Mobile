@@ -157,6 +157,7 @@ export default function Sesion({ navigation }) {
         accionBoton={handlerLogin}
         color='#FF6F61'
       />
+      <CardButton iconName="log-out-outline" label="Cerrar sesión" onPress={handleLogout} color="#fff" />
       {/* Texto separador para las opciones de inicio de sesión con redes sociales */}
       <Text style={styles.orText}>― O continua con ―</Text>
       {/* Contenedor para los botones de redes sociales */}
