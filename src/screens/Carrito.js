@@ -20,7 +20,7 @@ const Carrito = ({ navigation }) => {
   // Estado para el id del detalle seleccionado para modificar
   const [idDetalle, setIdDetalle] = useState(null);
   // Estado para la cantidad del producto seleccionado en el carrito
-  const [cantidadProductoCarrito, setCantidadProductoCarrito] = useState(0);
+  const [cantidadLibroCarrito, setCantidadLibroCarrito] = useState(0);
   // Estado para controlar la visibilidad del modal de edición de cantidad
   const [modalVisible, setModalVisible] = useState(false);
   // IP del servidor
@@ -42,7 +42,7 @@ const Carrito = ({ navigation }) => {
   // Función para obtener los detalles del carrito desde el servidor
   const getDetalleCarrito = async () => {
     try {
-      const response = await fetch(`${ip}/NewPowerLetters/api/services/public/pedido.php?action=readDetail`, {
+      const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/pedido.php?action=readDetail`, {
         method: 'GET',
       });
       const data = await response.json();
@@ -62,7 +62,7 @@ const Carrito = ({ navigation }) => {
   // Función para finalizar el pedido
   const finalizarPedido = async () => {
     try {
-      const response = await fetch(`${ip}/NewPowerLetters/api/services/public/pedido.php?action=finishOrder`, {
+      const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/pedido.php?action=finishOrder`, {
         method: 'GET',
       });
       const data = await response.json();
@@ -106,7 +106,7 @@ const Carrito = ({ navigation }) => {
   const handleEditarDetalle = (idDetalle, cantidadDetalle) => {
     setModalVisible(true);
     setIdDetalle(idDetalle);
-    setCantidadProductoCarrito(cantidadDetalle);
+    setCantidadLibroCarrito(cantidadDetalle);
   };
 
   // Función para renderizar cada elemento del carrito
@@ -116,8 +116,8 @@ const Carrito = ({ navigation }) => {
       cargarCategorias={getDetalleCarrito}
       modalVisible={modalVisible}
       setModalVisible={setModalVisible}
-      setCantidadProductoCarrito={setCantidadProductoCarrito}
-      cantidadProductoCarrito={cantidadProductoCarrito}
+      setCantidadLibroCarrito={setCantidadLibroCarrito}
+      cantidadLibroCarrito={cantidadLibroCarrito}
       idDetalle={idDetalle}
       setIdDetalle={setIdDetalle}
       accionBotonDetalle={handleEditarDetalle}
@@ -134,8 +134,8 @@ const Carrito = ({ navigation }) => {
         modalVisible={modalVisible}
         idDetalle={idDetalle}
         setIdDetalle={setIdDetalle}
-        setCantidadProductoCarrito={setCantidadProductoCarrito}
-        cantidadProductoCarrito={cantidadProductoCarrito}
+        setCantidadLibroCarrito={setCantidadLibroCarrito}
+        cantidadLibroCarrito={cantidadLibroCarrito}
         getDetalleCarrito={getDetalleCarrito}
       />
 

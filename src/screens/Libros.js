@@ -1,4 +1,4 @@
-import { StatusBar, StyleSheet, Text, View, FlatList, SafeAreaView } from 'react-native';
+import { StatusBar, StyleSheet, Text, View, FlatList, SafeAreaView, Alert } from 'react-native';
 import { useState, useEffect } from 'react';
 import * as Constantes from '../utils/constantes';
 import LibroCard from '../components/Libros/LibroCard'; // Cambia la importación
@@ -11,6 +11,7 @@ export default function Libros({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [idLibroModal, setIdLibroModal] = useState('');
   const [nombreLibroModal, setNombreLibroModal] = useState('');
+  const [cantidad, setCantidad] = useState(''); // Estado para la cantidad
 
   const handleCompra = (nombre, id) => {
     setModalVisible(true);
@@ -45,21 +46,23 @@ export default function Libros({ navigation }) {
       <ModalCompra
         visible={modalVisible}
         cerrarModal={setModalVisible}
-        nombreProductoModal={nombreLibroModal}
-        idProductoModal={idLibroModal}
+        nombreLibroModal={nombreLibroModal}
+        idLibroModal={idLibroModal}
+        cantidad={cantidad}
+        setCantidad={setCantidad} // Pasa setCantidad al modal
       />
       <SafeAreaView style={styles.containerFlat}>
         <FlatList
           data={dataLibros}
-          keyExtractor={(item) => item.id_libro} // Ajusta el identificador de libro
+          keyExtractor={(item) => item.id_libro}
           renderItem={({ item }) => (
             <LibroCard
               ip={ip}
-              imagenLibro={item.imagen} // Cambia el nombre a imagenLibro
-              idLibro={item.id_libro} // Cambia el nombre a idLibro
-              tituloLibro={item.titulo_libro} // Cambia el nombre a tituloLibro
-              descripcionLibro={item.descripcion_libro} // Cambia el nombre a descripcionLibro
-              precioLibro={item.precio} // Cambia el nombre a precioLibro
+              imagenLibro={item.imagen}
+              idLibro={item.id_libro}
+              tituloLibro={item.titulo_libro}
+              descripcionLibro={item.descripcion_libro}
+              precioLibro={item.precio}
               accionBotonLibro={() => handleCompra(item.titulo_libro, item.id_libro)}
             />
           )}

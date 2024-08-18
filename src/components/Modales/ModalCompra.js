@@ -3,7 +3,7 @@ import { View, Text, Modal, StyleSheet, TouchableOpacity, TextInput, Alert } fro
 import Buttons from '../Buttons/Button';
 import * as Constantes from '../../utils/constantes'
 
-const ModalCompra = ({ visible, cerrarModal, nombreProductoModal, idProductoModal, cantidad, setCantidad}) => {
+const ModalCompra = ({ visible, cerrarModal, nombreLibroModal, idLibroModal, cantidad, setCantidad}) => {
 
   const ip = Constantes.IP;
 
@@ -16,10 +16,10 @@ const ModalCompra = ({ visible, cerrarModal, nombreProductoModal, idProductoModa
         }
         else {
             const formData = new FormData();
-            formData.append('idProducto', idProductoModal);
-            formData.append('cantidadProducto', cantidad);
+            formData.append('idLibro', idLibroModal);
+            formData.append('cantidadLibro', cantidad);
 
-            const response = await fetch(`${ip}/NewPowerLetters/api/services/public/pedido.php?action=createDetail`, {
+            const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/pedido.php?action=createDetail`, {
                 method: 'POST',
                 body: formData
             });
@@ -54,7 +54,7 @@ const ModalCompra = ({ visible, cerrarModal, nombreProductoModal, idProductoModa
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Text style={styles.modalText}>{nombreProductoModal}</Text>
+          <Text style={styles.modalText}>{nombreLibroModal}</Text>
           <Text style={styles.modalText}>Cantidad:</Text>
           <TextInput  
             style={styles.input}

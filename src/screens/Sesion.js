@@ -5,6 +5,7 @@ import Input from '../components/Inputs/Input'
 import InputEmail from '../components/Inputs/InputEmail'
 import Buttons from '../components/Buttons/Button';
 import SocialButton from '../components/Buttons/SocialButton';
+import CardButton from '../components/HomeCards/CardButton';
 import * as Constantes from '../utils/constantes'
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -15,6 +16,22 @@ export default function Sesion({ navigation }) {
   const [usuario, setUsuario] = useState('')
   const [contrasenia, setContrasenia] = useState('')
 
+  //Función para cerrar la sesión
+  const handleLogout = async () => {
+    try {
+      const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/usuario.php?action=logOut`, {
+        method: 'GET'
+      });
+      const data = await response.json();
+      if (data.status) {
+        navigation.navigate('Sesion');
+      } else {
+        Alert.alert('Error', data.error);
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Ocurrió un error al cerrar la sesión');
+    }
+  };
   // Efecto para validar la sesión al cargar la pantalla o al enfocarse en ella
   useFocusEffect(
     // La función useFocusEffect ejecuta un efecto cada vez que la pantalla se enfoca.
@@ -135,6 +152,7 @@ export default function Sesion({ navigation }) {
       />
       {/* Texto separador para las opciones de inicio de sesión con redes sociales */}
       <Text style={styles.orText}>― O continua con ―</Text>
+      <CardButton iconName="log-out-outline" label="Cerrar sesión" onPress={handleLogout} color="#fff" />
       {/* Contenedor para los botones de redes sociales */}
       <View style={styles.socialContainer}>
         <SocialButton name="google" size={30} color="#DB4437" />

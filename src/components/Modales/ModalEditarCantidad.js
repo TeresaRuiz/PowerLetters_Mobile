@@ -3,22 +3,22 @@ import { View, Text, Modal, StyleSheet, TouchableOpacity, TextInput, Alert } fro
 import Buttons from '../Buttons/Button';
 import * as Constantes from '../../utils/constantes';
 
-const ModalEditarCantidad = ({setModalVisible, modalVisible, idDetalle, setCantidadProductoCarrito, cantidadProductoCarrito, getDetalleCarrito}) => {
+const ModalEditarCantidad = ({setModalVisible, modalVisible, idDetalle, setCantidadLibroCarrito, cantidadLibroCarrito, getDetalleCarrito}) => {
 
   const ip = Constantes.IP;
 
   const handleUpdateDetalleCarrito = async () => {
     try {
-      if (cantidadProductoCarrito <= 0) {
+      if (cantidadLibroCarrito <= 0) {
         Alert.alert("La cantidad no puede ser igual o menor a 0");
         return; // Corrige la lógica aquí
       }
 
       const formData = new FormData();
       formData.append('idDetalle', idDetalle);
-      formData.append('cantidadProducto', cantidadProductoCarrito);
+      formData.append('cantidadLibro', cantidadLibroCarrito);
 
-      const response = await fetch(`${ip}/NewPowerLetters/api/services/public/pedido.php?action=updateDetail`, {
+      const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/pedido.php?action=updateDetail`, {
         method: 'POST',
         body: formData
       });
@@ -52,12 +52,12 @@ const ModalEditarCantidad = ({setModalVisible, modalVisible, idDetalle, setCanti
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-        <Text style={styles.modalText}>Cantidad actual: {cantidadProductoCarrito}</Text>
+        <Text style={styles.modalText}>Cantidad actual: {cantidadLibroCarrito}</Text>
           <Text style={styles.modalText}>Nueva cantidad:</Text>
           <TextInput
             style={styles.input}
-            value={cantidadProductoCarrito}
-            onChangeText={setCantidadProductoCarrito}
+            value={cantidadLibroCarrito}
+            onChangeText={setCantidadLibroCarrito}
             keyboardType="numeric"
             placeholder="Ingrese la cantidad"
           />

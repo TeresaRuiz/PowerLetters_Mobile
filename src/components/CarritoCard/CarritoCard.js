@@ -22,7 +22,7 @@ const CarritoCard = ({ item, updateDataDetalleCarrito, accionBotonDetalle }) => 
             onPress: async () => {
               const formData = new FormData();
               formData.append('idDetalle', idDetalle);
-              const response = await fetch(`${ip}/NewPowerLetters/api/services/public/pedido.php?action=deleteDetail`, {
+              const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/pedido.php?action=deleteDetail`, {
                 method: 'POST',
                 body: formData
               });
@@ -46,12 +46,12 @@ const CarritoCard = ({ item, updateDataDetalleCarrito, accionBotonDetalle }) => 
     <View style={styles.itemContainer}>
       <Text style={styles.itemText}>ID: {item.id_detalle}</Text>
       <Text style={styles.itemText}>Nombre: {item.nombre_producto}</Text>
-      <Text style={styles.itemText}>Precio: ${item.precio_producto}</Text>
-      <Text style={styles.itemText}>Cantidad: {item.cantidad_producto}</Text>
-      <Text style={styles.itemText}>SubTotal: ${(parseFloat(item.cantidad_producto) * parseFloat(item.precio_producto)).toFixed(2)}</Text>
+      <Text style={styles.itemText}>Precio: ${item.precio}</Text>
+      <Text style={styles.itemText}>Cantidad: {item.cantidad}</Text>
+      <Text style={styles.itemText}>SubTotal: ${(parseFloat(item.cantidad) * parseFloat(item.precio)).toFixed(2)}</Text>
 
       <TouchableOpacity style={styles.modifyButton}
-        onPress={() => accionBotonDetalle(item.id_detalle, item.cantidad_producto)}>
+        onPress={() => accionBotonDetalle(item.id_detalle, item.cantidad)}>
         <Text style={styles.buttonText}>Modificar cantidad</Text>
       </TouchableOpacity>
 

@@ -87,8 +87,8 @@ export default function Libros({ navigation }) {
       <ModalCompra
         visible={modalVisible}
         cerrarModal={setModalVisible}
-        nombreProductoModal={nombreLibroModal}
-        idProductoModal={idLibroModal}
+        nombreLibroModal={nombreLibroModal}
+        idLibroModal={idLibroModal}
         cantidad={cantidad}
         setCantidad={setCantidad}
       />
