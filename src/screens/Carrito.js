@@ -11,7 +11,6 @@ import * as Constantes from '../utils/constantes';
 import Buttons from '../components/Buttons/Button';
 import CarritoCard from '../components/CarritoCard/CarritoCard';
 import ModalEditarCantidad from '../components/Modales/ModalEditarCantidad';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const Carrito = ({ navigation }) => {
@@ -30,7 +29,6 @@ const Carrito = ({ navigation }) => {
   const backProducts = () => {
     navigation.navigate('Productos');
   };
-
   // Efecto para cargar los detalles del carrito al cargar la pantalla o al enfocarse en ella
   useFocusEffect(
     // La función useFocusEffect ejecuta un efecto cada vez que la pantalla se enfoca.
@@ -77,27 +75,6 @@ const Carrito = ({ navigation }) => {
       }
     } catch (error) {
       Alert.alert('Error', 'Ocurrió un error al finalizar pedido');
-    }
-  };
-  // Función para guardar el pedido
-  const guardarPedidoEnHistorial = async () => {
-    try {
-      const historialPedidos = await AsyncStorage.getItem('historialPedidos');
-      let historial = historialPedidos ? JSON.parse(historialPedidos) : [];
-
-      // Verificar y formatear datos antes de guardarlos
-      const nuevoPedido = dataDetalleCarrito.map(detalle => ({
-        id: detalle.id_detalle,
-        nombreProducto: detalle.nombre_producto,
-        cantidad: detalle.cantidad_producto || 0, // Asegurarse de que cantidad esté presente
-        precio: detalle.precio_producto || 0 // Asegurarse de que precio esté presente
-      }));
-
-      historial.push(nuevoPedido); // Agregar el carrito actual al historial
-      await AsyncStorage.setItem('historialPedidos', JSON.stringify(historial));
-      console.log('Historial guardado correctamente:', historial);
-    } catch (error) {
-      console.error('Error al guardar en el historial de pedidos:', error);
     }
   };
 
