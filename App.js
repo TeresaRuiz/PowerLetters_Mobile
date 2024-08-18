@@ -5,7 +5,7 @@ import Sesion from './src/screens/Sesion.js'; // Importa la pantalla de Sesión
 import SignUp from './src/screens/SignUp.js'; // Importa la pantalla de Registro
 import UpdateUser from './src/screens/UpdateUser.js'; // Importa la pantalla de Actualización de Usuario
 import TabNavigator from './src/tabNavigator/TabNavigator.js'; // Importa el navegador de pestañas
-import Productos from './src/screens/Productos.js';
+import Productos from './src/screens/Categorias.js';
 import Onboarding from './src/screens/Onboarding.js';
 export default function App() {
 

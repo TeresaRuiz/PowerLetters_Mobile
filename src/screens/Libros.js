@@ -65,6 +65,7 @@ export default function Libros({ navigation }) {
           )}
         />
       </SafeAreaView>
+      <Text style={styles.title}></Text>
     </View>
   );
 }

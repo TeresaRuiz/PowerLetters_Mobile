@@ -4,7 +4,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { Platform, StyleSheet, View } from 'react-native';
 
 // Importa tus componentes de pantalla aquí
-import Productos from '../screens/Productos';
+import Productos from '../screens/Categorias';
 import Home from '../screens/Home';
 import Carrito from '../screens/Carrito';
 import Libros from '../screens/Libros';
