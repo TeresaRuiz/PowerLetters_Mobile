@@ -9,16 +9,27 @@ export default function LibroCard({
   descripcionLibro,
   precioLibro,
   accionBotonLibro,
+  navigation,
 }) {
   return (
     <View style={styles.card}>
-      <View style={styles.imageContainer}>
+      <TouchableOpacity
+        style={styles.imageContainer}
+        onPress={() => navigation.navigate('LibroDetalle', {
+          id_libro: idLibro,
+          tituloLibro,
+          descripcionLibro,
+          precioLibro,
+          imagenLibro,
+          ip,
+        })}
+      >
         <Image
           source={{ uri: `${ip}/PowerLetters_TeresaVersion/api/images/libros/${imagenLibro}` }}
           style={styles.image}
           resizeMode="contain"
         />
-      </View>
+      </TouchableOpacity>
       <View style={styles.infoContainer}>
         <Text style={styles.text}>#{idLibro}</Text>
         <Text style={styles.textTitle}>Título: <Text style={styles.textDentro}>{tituloLibro}</Text></Text>

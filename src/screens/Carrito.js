@@ -67,7 +67,6 @@ const Carrito = ({ navigation }) => {
       if (data.status) {
         Alert.alert("Se finalizó la compra correctamente")
         // Guardar el pedido en el historial
-        guardarPedidoEnHistorial(); // Implementar esta función
         setDataDetalleCarrito([]); // Limpiar la lista de detalles del carrito
         navigation.navigate('TabNavigator', { screen: 'Productos' });
       } else {

@@ -120,7 +120,8 @@ export default function Libros({ navigation }) {
               tituloLibro={item.titulo_libro}
               descripcionLibro={item.descripcion_libro}
               precioLibro={item.precio}
-              existenciasProducto={item.existencias} // Cambio en el nombre de la propiedad
+              existenciasProducto={item.existencias}
+              navigation={navigation}  // Cambio en el nombre de la propiedad
               accionBotonLibro={() => handleCompra(item.titulo_libro, item.id_libro)}
             />
           )}

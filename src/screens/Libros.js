@@ -54,7 +54,7 @@ export default function Libros({ navigation }) {
       <SafeAreaView style={styles.containerFlat}>
         <FlatList
           data={dataLibros}
-          keyExtractor={(item) => item.id_libro}
+          keyExtractor={(item) => item.id_libro.toString()}
           renderItem={({ item }) => (
             <LibroCard
               ip={ip}
@@ -63,10 +63,12 @@ export default function Libros({ navigation }) {
               tituloLibro={item.titulo_libro}
               descripcionLibro={item.descripcion_libro}
               precioLibro={item.precio}
+              navigation={navigation} // Pasa navigation aquí
               accionBotonLibro={() => handleCompra(item.titulo_libro, item.id_libro)}
             />
           )}
         />
+
       </SafeAreaView>
       <Text style={styles.title}></Text>
     </View>
