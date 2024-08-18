@@ -8,6 +8,7 @@ import TabNavigator from './src/tabNavigator/TabNavigator.js'; // Importa el nav
 import Productos from './src/screens/Categorias.js';
 import LibroDetalle from './src/screens/LibroDetalle.js';
 import Onboarding from './src/screens/Onboarding.js';
+import Recuperacion from './src/screens/RecuperacionScreen.js';
 export default function App() {
 
   const Stack = createNativeStackNavigator(); // Crea una instancia del stack navigator
@@ -25,6 +26,7 @@ export default function App() {
         <Stack.Screen name="LibroDetalle" component={LibroDetalle} />
         <Stack.Screen name="UpdateUser" component={UpdateUser} />
         <Stack.Screen name="Productos" component={Productos} />
+        <Stack.Screen name="Recuperacion" component={Recuperacion} />
         <Stack.Screen name="TabNavigator" component={TabNavigator} />
       </Stack.Navigator>
     </NavigationContainer>

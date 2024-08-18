@@ -121,6 +121,11 @@ export default function Sesion({ navigation }) {
     // Navega a la pantalla de registro
     navigation.navigate('SignUp');
   };
+  const Recuperar = async () => {
+    // Navega a la pantalla de registro
+    navigation.navigate('Recuperacion');
+  };
+
 
   useEffect(() => { validarSesion() }, [])
 
@@ -144,7 +149,9 @@ export default function Sesion({ navigation }) {
         contra={isContra}
       />
       {/* Enlace para recuperar la contraseña */}
+      <TouchableOpacity onPress={Recuperar}>
       <Text style={styles.recoveryText}>Recuerda tu contraseña</Text>
+      </TouchableOpacity>
       <Buttons
         textoBoton='Iniciar sesión'
         accionBoton={handlerLogin}
@@ -152,7 +159,6 @@ export default function Sesion({ navigation }) {
       />
       {/* Texto separador para las opciones de inicio de sesión con redes sociales */}
       <Text style={styles.orText}>― O continua con ―</Text>
-      <CardButton iconName="log-out-outline" label="Cerrar sesión" onPress={handleLogout} color="#fff" />
       {/* Contenedor para los botones de redes sociales */}
       <View style={styles.socialContainer}>
         <SocialButton name="google" size={30} color="#DB4437" />
@@ -163,6 +169,7 @@ export default function Sesion({ navigation }) {
       <TouchableOpacity onPress={irRegistrar}>
         <Text style={styles.signUpText}>¿No tienes una cuenta? Regístrate</Text>
       </TouchableOpacity>
+      
     </View>
   );
 }
