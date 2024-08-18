@@ -9,6 +9,8 @@ import Productos from './src/screens/Categorias.js';
 import LibroDetalle from './src/screens/LibroDetalle.js';
 import Onboarding from './src/screens/Onboarding.js';
 import Recuperacion from './src/screens/RecuperacionScreen.js';
+import PinVerification from './src/screens/PinRecuperacionScreen.js';
+import NewPassword from './src/screens/NewPasswordScreen.js';
 export default function App() {
 
   const Stack = createNativeStackNavigator(); // Crea una instancia del stack navigator
@@ -28,6 +30,8 @@ export default function App() {
         <Stack.Screen name="Productos" component={Productos} />
         <Stack.Screen name="Recuperacion" component={Recuperacion} />
         <Stack.Screen name="TabNavigator" component={TabNavigator} />
+        <Stack.Screen name="PinVerification" component={PinVerification} />
+        <Stack.Screen name="NewPassword" component={NewPassword} />
       </Stack.Navigator>
     </NavigationContainer>
   );
