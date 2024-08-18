@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Alert, ScrollView, TouchableOpacity, Image } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { Ionicons } from '@expo/vector-icons'; // Asegúrate de instalar esta librería
 import * as Constantes from '../utils/constantes';
 import Input from '../components/Inputs/Input';
 import InputMultiline from '../components/Inputs/InputMultiline';
-import Buttons from '../components/Buttons/Button';
 import MaskedInputTelefono from '../components/Inputs/MaskedInputTelefono';
 import MaskedInputDui from '../components/Inputs/MaskedInputDui';
 import InputEmail from '../components/Inputs/InputEmail';
@@ -12,10 +12,10 @@ import { useFocusEffect } from '@react-navigation/native';
 
 export default function UpdateProfile({ navigation }) {
   const ip = Constantes.IP;
-  // Declaración de estados
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
+  const [editando, setEditando] = useState(false);
 
   const [idCliente, setIdCliente] = useState('');
   const [nombre, setNombre] = useState('');
@@ -25,54 +25,47 @@ export default function UpdateProfile({ navigation }) {
   const [dui, setDui] = useState('');
   const [telefono, setTelefono] = useState('');
   const [fechaNacimiento, setFechaNacimiento] = useState('');
-  const [clave, setClave] = useState('');
-  const [confirmarClave, setConfirmarClave] = useState('');
-  // Validar sesión cuando el componente se enfoca
+
   useFocusEffect(
     React.useCallback(() => {
       validarSesion();
     }, [])
   );
-  // Función para validar si el usuario tiene una sesión activa
+
   const validarSesion = async () => {
     try {
-      // Hacer una petición para validar la sesión
-      // Si la sesión es válida, obtener los datos del usuario
-      // Si no, redirigir al usuario a la pantalla de inicio de sesión
       const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/usuario.php?action=getUser`, {
         method: 'GET'
       });
       const data = await response.json();
 
       if (data.status === 1) {
-        obtenerDatosUsuario(); // Llama a la función para obtener los datos del usuario
+        obtenerDatosUsuario();
       } else {
         Alert.alert("Sesión no activa", "Por favor, inicie sesión.");
-        navigation.navigate('Login'); // Redirige a la pantalla de inicio de sesión
+        navigation.navigate('Login');
       }
     } catch (error) {
       console.error(error);
       Alert.alert('Error', 'Ocurrió un error al validar la sesión');
     }
   };
-  // Función para obtener los datos del usuario
+
   const obtenerDatosUsuario = async () => {
     try {
-      // Hacer una petición para obtener los datos del usuario
-      const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/usuario.php?action=getClientData`, {
+      const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/usuario.php?action=readProfile`, {
         method: 'GET',
       });
-      // Actualizar los estados con los datos obtenidos
       const data = await response.json();
       if (data.status) {
-        setIdCliente(data.data.id_usuario);
-        setNombre(data.data.nombre_usuario);
-        setApellido(data.data.apellido_usuario);
-        setEmail(data.data.correo_usuario);
-        setDireccion(data.data.direccion_usuario);
-        setDui(data.data.dui_usuario);
-        setFechaNacimiento(data.data.nacimiento_usuario);
-        setTelefono(data.data.telefono_usuario);
+        setIdCliente(data.dataset.id_usuario);
+        setNombre(data.dataset.nombre_usuario);
+        setApellido(data.dataset.apellido_usuario);
+        setEmail(data.dataset.correo_usuario);
+        setDireccion(data.dataset.direccion_usuario);
+        setDui(data.dataset.dui_usuario);
+        setFechaNacimiento(data.dataset.nacimiento_usuario);
+        setTelefono(data.dataset.telefono_usuario);
       } else {
         Alert.alert('Error al obtener datos del usuario', data.error);
       }
@@ -81,12 +74,11 @@ export default function UpdateProfile({ navigation }) {
       Alert.alert('Ocurrió un error al intentar obtener los datos del usuario');
     }
   };
-  // Función para manejar el cambio de fecha en el DateTimePicker
+
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(false);
     setDate(currentDate);
-    // Formatear la fecha seleccionada y actualizarla en el estado
     const year = currentDate.getFullYear();
     const month = String(currentDate.getMonth() + 1).padStart(2, '0');
     const day = String(currentDate.getDate()).padStart(2, '0');
@@ -94,7 +86,7 @@ export default function UpdateProfile({ navigation }) {
     const fechaNueva = `${year}-${month}-${day}`;
     setFechaNacimiento(fechaNueva);
   };
-  // Función para mostrar el DateTimePicker
+
   const showMode = (currentMode) => {
     setShow(true);
     setMode(currentMode);
@@ -103,18 +95,17 @@ export default function UpdateProfile({ navigation }) {
   const showDatepicker = () => {
     showMode('date');
   };
-  // Función para manejar la actualización de datos del usuario
+
   const handleUpdate = async () => {
     try {
-      // Validar que todos los campos estén llenos
       if (!nombre.trim() || !apellido.trim() || !email.trim() || !direccion.trim() ||
-        !dui.trim() || !fechaNacimiento.trim() || !telefono.trim() || !clave.trim() || !confirmarClave.trim()) {
+        !dui.trim() || !fechaNacimiento.trim() || !telefono.trim()) {
         Alert.alert("Debes llenar todos los campos");
         return;
       }
-      // Crear un FormData con los datos a enviar
+
       const formData = new FormData();
-      formData.append('idUsuario', idCliente);
+      formData.append('id_usuario', idCliente);
       formData.append('nombre_usuario', nombre);
       formData.append('apellido_usuario', apellido);
       formData.append('correo_usuario', email);
@@ -122,31 +113,40 @@ export default function UpdateProfile({ navigation }) {
       formData.append('dui_usuario', dui);
       formData.append('nacimiento_usuario', fechaNacimiento);
       formData.append('telefono_usuario', telefono);
-      formData.append('clave_usuario', clave);
-      formData.append('confirmarClave', confirmarClave);
-      // Hacer una petición para actualizar los datos del usuario
-      const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/usuario.php?action=updateClient`, {
+
+      const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/usuario.php?action=editProfile`, {
         method: 'POST',
         body: formData
       });
-      // Si la actualización es exitosa, mostrar un mensaje y navegar a la pantalla anterior
+
       const data = await response.json();
       if (data.status) {
-        Alert.alert('Datos actualizados correctamente');
-        navigation.navigate('UpdateUser');
+        Alert.alert('Éxito', 'Datos actualizados correctamente');
+        setEditando(false);
+        obtenerDatosUsuario();
       } else {
-        Alert.alert('Error', data.error);
+        Alert.alert('Error', data.error || 'No se pudo actualizar el perfil');
       }
     } catch (error) {
-      // Si hay un error, mostrar un mensaje de error
       console.error(error);
-      Alert.alert('Ocurrió un error al intentar actualizar los datos del usuario');
+      Alert.alert('Error', 'Ocurrió un error al intentar actualizar los datos del usuario');
     }
   };
+
+  const handleCancel = () => {
+    setEditando(false);
+    obtenerDatosUsuario();
+  };
+
+  useEffect(() => {
+    obtenerDatosUsuario();
+  }, []);
+
   // Renderizado del componente
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>¡Actualiza!</Text>
+       <Text style={styles.title}></Text>
+      <Text style={styles.title}>Actualizar perfil</Text>
 
       <Image source={require('../img/registro.png')} style={styles.image} />
 
@@ -154,27 +154,39 @@ export default function UpdateProfile({ navigation }) {
         placeHolder='Nombre del usuario'
         setValor={nombre}
         setTextChange={setNombre}
+        editable={editando}
       />
       <Input
         placeHolder='Apellido del usuario'
         setValor={apellido}
         setTextChange={setApellido}
+        editable={editando}
       />
       <InputEmail
         placeHolder='Correo del usuario'
         setValor={email}
-        setTextChange={setEmail} />
+        setTextChange={setEmail}
+        editable={editando}
+      />
       <InputMultiline
         placeHolder='Dirección del usuario'
         setValor={setDireccion}
         valor={direccion}
-        setTextChange={setDireccion} />
+        setTextChange={setDireccion}
+        editable={editando}
+      />
       <MaskedInputDui
         dui={dui}
-        setDui={setDui} />
+        setDui={setDui}
+        editable={editando}
+      />
       <View style={styles.contenedorFecha}>
         <Text style={styles.fecha}>Fecha Nacimiento</Text>
-        <TouchableOpacity onPress={showDatepicker}><Text style={styles.fechaSeleccionar}>Seleccionar Fecha:</Text></TouchableOpacity>
+        {editando && (
+          <TouchableOpacity onPress={showDatepicker}>
+            <Text style={styles.fechaSeleccionar}>Seleccionar Fecha:</Text>
+          </TouchableOpacity>
+        )}
         <Text style={styles.fecha}>Selección: {fechaNacimiento}</Text>
         {show && (
           <DateTimePicker
@@ -188,28 +200,31 @@ export default function UpdateProfile({ navigation }) {
       </View>
       <MaskedInputTelefono
         telefono={telefono}
-        setTelefono={setTelefono} />
-      <Input
-        placeHolder='Clave del usuario'
-        setValor={clave}
-        setTextChange={setClave}
-        contra={true}
+        setTelefono={setTelefono}
+        editable={editando}
       />
-      <Input
-        placeHolder='Confirmar clave del usuario'
-        setValor={confirmarClave}
-        setTextChange={setConfirmarClave}
-        contra={true}
-      />
-      <Buttons
-        textoBoton='Actualizar'
-        accionBoton={handleUpdate}
-        color='#FF6F61'
-      />
+      
+      <View style={styles.iconContainer}>
+        {editando ? (
+          <>
+            <TouchableOpacity onPress={handleUpdate} style={styles.iconButton}>
+              <Ionicons name="checkmark-circle" size={52} color="#4CAF50" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleCancel} style={styles.iconButton}>
+              <Ionicons name="close-circle" size={52} color="#FF6F61" />
+            </TouchableOpacity>
+          </>
+        ) : (
+          <TouchableOpacity onPress={() => setEditando(true)} style={styles.iconButton}>
+            <Ionicons name="create" size={52} color="#4CAF50" />
+          </TouchableOpacity>
+        )}
+      </View>
     </ScrollView>
   );
 }
-// Estilos del componente
+
+
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 20,
@@ -219,7 +234,8 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 15,
+    marginLeft: 85
   },
   contenedorFecha: {
     width: '100%',
@@ -238,5 +254,18 @@ const styles = StyleSheet.create({
     height: 200,
     resizeMode: 'contain',
     marginVertical: 10,
+  },
+  iconContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
+  },
+  iconContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 20,
+  },
+  iconButton: {
+    marginHorizontal: 10,
   },
 });
