@@ -39,7 +39,7 @@ export default function UpdateProfile({ navigation }) {
       // Hacer una petición para validar la sesión
       // Si la sesión es válida, obtener los datos del usuario
       // Si no, redirigir al usuario a la pantalla de inicio de sesión
-      const response = await fetch(`${ip}/NewPowerLetters/api/services/public/cliente.php?action=getUser`, {
+      const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/usuario.php?action=getUser`, {
         method: 'GET'
       });
       const data = await response.json();
@@ -59,20 +59,20 @@ export default function UpdateProfile({ navigation }) {
   const obtenerDatosUsuario = async () => {
     try {
       // Hacer una petición para obtener los datos del usuario
-      const response = await fetch(`${ip}/NewPowerLetters/api/services/public/cliente.php?action=getClientData`, {
+      const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/usuario.php?action=getClientData`, {
         method: 'GET',
       });
       // Actualizar los estados con los datos obtenidos
       const data = await response.json();
       if (data.status) {
-        setIdCliente(data.data.id_cliente);
-        setNombre(data.data.nombre_cliente);
-        setApellido(data.data.apellido_cliente);
-        setEmail(data.data.correo_cliente);
-        setDireccion(data.data.direccion_cliente);
-        setDui(data.data.dui_cliente);
-        setFechaNacimiento(data.data.nacimiento_cliente);
-        setTelefono(data.data.telefono_cliente);
+        setIdCliente(data.data.id_usuario);
+        setNombre(data.data.nombre_usuario);
+        setApellido(data.data.apellido_usuario);
+        setEmail(data.data.correo_usuario);
+        setDireccion(data.data.direccion_usuario);
+        setDui(data.data.dui_usuario);
+        setFechaNacimiento(data.data.nacimiento_usuario);
+        setTelefono(data.data.telefono_usuario);
       } else {
         Alert.alert('Error al obtener datos del usuario', data.error);
       }
@@ -114,18 +114,18 @@ export default function UpdateProfile({ navigation }) {
       }
       // Crear un FormData con los datos a enviar
       const formData = new FormData();
-      formData.append('idCliente', idCliente);
-      formData.append('nombreCliente', nombre);
-      formData.append('apellidoCliente', apellido);
-      formData.append('correoCliente', email);
-      formData.append('direccionCliente', direccion);
-      formData.append('duiCliente', dui);
-      formData.append('nacimientoCliente', fechaNacimiento);
-      formData.append('telefonoCliente', telefono);
-      formData.append('claveCliente', clave);
+      formData.append('idUsuario', idCliente);
+      formData.append('nombre_usuario', nombre);
+      formData.append('apellido_usuario', apellido);
+      formData.append('correo_usuario', email);
+      formData.append('direccion_usuario', direccion);
+      formData.append('dui_usuario', dui);
+      formData.append('nacimiento_usuario', fechaNacimiento);
+      formData.append('telefono_usuario', telefono);
+      formData.append('clave_usuario', clave);
       formData.append('confirmarClave', confirmarClave);
       // Hacer una petición para actualizar los datos del usuario
-      const response = await fetch(`${ip}/NewPowerLetters/api/services/public/cliente.php?action=updateClient`, {
+      const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/usuario.php?action=updateClient`, {
         method: 'POST',
         body: formData
       });

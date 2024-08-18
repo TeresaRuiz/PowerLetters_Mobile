@@ -26,7 +26,7 @@ export default function Sesion({ navigation }) {
   const validarSesion = async () => {
     try {
       // Hace una petición para validar si hay una sesión activa
-      const response = await fetch(`${ip}/NewPowerLetters/api/services/public/cliente.php?action=getUser`, {
+      const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/usuario.php?action=getUser`, {
         method: 'GET'
       });
 
@@ -48,7 +48,7 @@ export default function Sesion({ navigation }) {
   const cerrarSesion = async () => {
     try {
       // Hace una petición para cerrar la sesión
-      const response = await fetch(`${ip}/NewPowerLetters/api/services/public/cliente.php?action=logOut`, {
+      const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/usuario.php?action=logOut`, {
         method: 'GET'
       });
 
@@ -75,10 +75,10 @@ export default function Sesion({ navigation }) {
     try {
       // Crea un FormData con los datos de inicio de sesión
       const formData = new FormData();
-      formData.append('correo', usuario);
-      formData.append('clave', contrasenia);
+      formData.append('correo_usuario', usuario);
+      formData.append('clave_usuario', contrasenia);
       // Hace una petición para iniciar sesión
-      const response = await fetch(`${ip}/NewPowerLetters/api/services/public/cliente.php?action=logIn`, {
+      const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/usuario.php?action=logIn`, {
         method: 'POST',
         body: formData
       });

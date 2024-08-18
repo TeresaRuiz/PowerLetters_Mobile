@@ -10,7 +10,7 @@ export default function Home({ navigation }) {
   //Función para cerrar la sesión
   const handleLogout = async () => {
     try {
-      const response = await fetch(`${ip}/NewPowerLetters/api/services/public/cliente.php?action=logOut`, {
+      const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/usuario.php?action=logOut`, {
         method: 'GET'
       });
       const data = await response.json();
@@ -34,12 +34,12 @@ export default function Home({ navigation }) {
   //función para obtener el usuario
   const getUser = async () => {
     try {
-      const response = await fetch(`${ip}/NewPowerLetters/api/services/public/cliente.php?action=getUser`, {
+      const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/usuario.php?action=getUser`, {
         method: 'GET'
       });
       const data = await response.json();
       if (data.status) {
-        setNombre(data.name.nombre_cliente);
+        setNombre(data.name.nombre_usuario);
       } else {
         Alert.alert('Error', data.error);
       }
@@ -61,12 +61,12 @@ export default function Home({ navigation }) {
       </View>
     );
   }
-
+  
   return (
     <View style={styles.container}>
       <Image source={require('../img/inicio.png')} style={styles.image} />
       <Text style={styles.title}>¡Bienvenido/a a Power Letters!</Text>
-      <Text style={styles.subtitle}>{nombre ? nombre : 'No hay Nombre para mostrar'}</Text>
+      <Text style={styles.subtitle}>{nombre ? nombre : 'No hay nombre para mostrar'}</Text>
       <View style={styles.cardsContainer}>
         <CardButton iconName="person-outline" label="Perfil" onPress={EditUser} color="#fff" />
         <CardButton iconName="book-outline" label="Libros" onPress={irActualizar} color="#fff" />

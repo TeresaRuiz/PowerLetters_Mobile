@@ -81,17 +81,17 @@ export default function SignUp({ navigation }) {
             }
             // Crear un FormData con los datos a enviar
             const formData = new FormData();
-            formData.append('nombreCliente', nombre);
-            formData.append('apellidoCliente', apellido);
-            formData.append('correoCliente', email);
-            formData.append('direccionCliente', direccion);
-            formData.append('duiCliente', dui);
-            formData.append('nacimientoCliente', fechaNacimiento);
-            formData.append('telefonoCliente', telefono);
-            formData.append('claveCliente', clave);
+            formData.append('nombre_usuario', nombre);
+            formData.append('apellido_usuario', apellido);
+            formData.append('correo_usuario', email);
+            formData.append('direccion_usuario', direccion);
+            formData.append('dui_usuario', dui);
+            formData.append('nacimiento_usuario', fechaNacimiento);
+            formData.append('telefono_usuario', telefono);
+            formData.append('clave_usuario', clave);
             formData.append('confirmarClave', confirmarClave);
             // Hacer una petición para registrar al usuario
-            const response = await fetch(`${ip}/NewPowerLetters/api/services/public/cliente.php?action=signUpMovil`, {
+            const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/usuario.php?action=signUpMovil`, {
                 method: 'POST',
                 body: formData
             });
