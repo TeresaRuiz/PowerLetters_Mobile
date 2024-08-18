@@ -1,149 +1,122 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
-import Constants from 'expo-constants';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import Buttons from '../components/Buttons/Button';
+import { View, Text, StyleSheet, Alert, Image, ScrollView, ActivityIndicator } from 'react-native';
+import * as Constantes from '../utils/constantes';
 
-const HistorialPedidos = ({ navigation }) => {
-    const [historialPedidos, setHistorialPedidos] = useState([]);
-    //Función para obtener el historial
-    useFocusEffect(
-        React.useCallback(() => {
-            obtenerHistorialPedidos();
-        }, [])
-    );
-    const borrarHistorialPedidos = async () => {
-        try {
-            //Función para borrar el historial
-            await AsyncStorage.removeItem('historialPedidos');
-            setHistorialPedidos([]);
-            console.log('Historial de pedidos borrado');
-        } catch (error) {
-            console.error('Error al borrar el historial de pedidos:', error);
-        }
-    };
+export default function HistorialPedidos({ navigation }) {
+  const [historial, setHistorial] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const ip = Constantes.IP;
 
-    const obtenerHistorialPedidos = async () => {
-        try {
-            //Función para obtener el historial de pedidos
-            const historial = await AsyncStorage.getItem('historialPedidos');
-            if (historial !== null) {
-                const pedidos = JSON.parse(historial).map(pedido =>
-                    pedido.map(detalle => ({
-                        ...detalle,
-                        cantidad: detalle.cantidad_producto || 0, // Asegurarse de que cantidad esté presente
-                        precio: detalle.precio_producto || 0 // Asegurarse de que precio esté presente
-                    }))
-                );
-                console.log('Historial recuperado:', pedidos);
-                setHistorialPedidos(pedidos);
-            }
-        } catch (error) {
-            console.error('Error al obtener el historial de pedidos:', error);
-        }
-    };
+  const getHistorial = async () => {
+    try {
+      const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/pedido.php?action=readHistorial`, {
+        method: 'GET',
+      });
+      const data = await response.json();
+      if (data.status) {
+        setHistorial(data.dataset);
+      } else {
+        Alert.alert('Error', data.error);
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Ocurrió un error al obtener el historial de pedidos');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    const renderItem = ({ item, index }) => {
-        const total = item.reduce((sum, pedido) => {
-            const subtotal = (pedido.precio_producto || 0) * (pedido.cantidad_producto || 0);
-            return sum + subtotal;
-        }, 0);
+  useEffect(() => {
+    getHistorial();
+  }, []);
 
-        return (
-            <View style={styles.item}>
-                <View style={styles.itemHeader}>
-                    <Text style={styles.itemText}>Pedido #{index + 1}</Text>
-                    <Text style={styles.itemText}>Total: ${total.toFixed(2)}</Text>
-                </View>
-                {item.map((detalle, i) => (
-                    <View key={i} style={styles.itemDetails}>
-                        <Text style={styles.itemText}>Libro: {detalle.nombre_producto}</Text>
-                        <Text style={styles.itemText}>Cantidad: {detalle.cantidad_producto}</Text>
-                        <Text style={styles.itemText}>Precio: ${detalle.precio_producto}</Text>
-                    </View>
-                ))}
-            </View>
-
-        );
-    };
-    //Aparecera en la pantalla en dado caso no hayan pedidos
+  if (loading) {
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Historial de pedidos</Text>
-            <FlatList
-                data={historialPedidos}
-                renderItem={renderItem}
-                keyExtractor={(item, index) => index.toString()}
-                contentContainerStyle={{ flexGrow: 1 }}
-                ListEmptyComponent={() => (
-                    <Text style={styles.emptyText}>No hay pedidos finalizados en el historial.</Text>
-                )}
-            />
-            <Buttons
-                textoBoton='Borrar historial'
-                accionBoton={borrarHistorialPedidos}
-                color='#5064d4'
-            />
-        </View>
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#5C3D2E" />
+      </View>
     );
-};
-//Elementos del componente
+  }
+
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.title}></Text>
+        <Text style={styles.title}>Historial de pedidos</Text>
+      {historial.length === 0 ? (
+        <Text style={styles.subtitle}>No hay pedidos para mostrar</Text>
+      ) : (
+        historial.map((item, index) => (
+          <View key={index} style={styles.card}>
+            <Image
+              source={{ uri: `${ip}/PowerLetters_TeresaVersion/api/images/libros/${item.imagen}` }}
+              style={styles.image}
+            />
+            <View style={styles.textContainer}>
+              <Text style={styles.itemText}>Fecha: {item.fecha_pedido}</Text>
+              <Text style={styles.itemText}>Dirección: {item.direccion_pedido}</Text>
+              <Text style={styles.itemText}>Estado: {item.estado}</Text>
+              <Text style={styles.itemText}>Libro: {item.nombre_libro}</Text>
+              <Text style={styles.itemText}>Cantidad: {item.cantidad}</Text>
+              <Text style={styles.itemText}>Precio: ${item.precio}</Text>
+              <Text style={styles.itemText}>Subtotal: ${item.subtotal}</Text>
+            </View>
+          </View>
+        ))
+      )}
+    </ScrollView>
+  );
+}
+
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#f0ecfc',
-        paddingTop: Constants.statusBarHeight,
-        paddingHorizontal: 16,
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        marginVertical: 16,
-        color: '#5C3D2E',
-    },
-    item: {
-        backgroundColor: '#FFFFFF',
-        borderRadius: 8,
-        padding: 16,
-        marginBottom: 12,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-    },
-    itemText: {
-        fontSize: 18,
-        marginBottom: 8,
-    },
-    emptyText: {
-        fontSize: 18,
-        textAlign: 'center',
-        marginTop: 20,
-    },
-
-    itemHeader: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: 8, // Espacio entre encabezado y detalles
-    },
-    itemDetails: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginVertical: 4, // Espacio vertical entre detalles
-    },
-    itemText: {
-        fontSize: 16,
-        marginHorizontal: 8, // Espacio horizontal entre elementos
-    },
+  container: {
+    flexGrow: 1,
+    backgroundColor: '#f0ecfc',
+    padding: 20,
+  },
+  loadingContainer: {
+    flex: 1,
+    backgroundColor: '#f0ecfc',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 20,
+    color: '#5C3D2E',
+  },
+  subtitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    textAlign: 'center',
+    marginBottom: 20,
+    color: '#5C3D2E',
+  },
+  card: {
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  image: {
+    width: 100,
+    height: 150,
+    borderRadius: 8,
+    marginRight: 15,
+  },
+  textContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  itemText: {
+    fontSize: 16,
+    marginBottom: 5,
+    color: '#333',
+  },
 });
-
-
-export default HistorialPedidos;
