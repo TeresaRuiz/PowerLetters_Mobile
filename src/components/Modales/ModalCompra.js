@@ -1,46 +1,50 @@
-import React, { useState, useEffect} from 'react';
-import { View, Text, Modal, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Modal, StyleSheet, TextInput, Alert } from 'react-native';
 import Buttons from '../Buttons/Button';
-import * as Constantes from '../../utils/constantes'
+import * as Constantes from '../../utils/constantes';
 
-const ModalCompra = ({ visible, cerrarModal, nombreLibroModal, idLibroModal, cantidad, setCantidad}) => {
-
+const ModalCompra = ({ visible, cerrarModal, nombreLibroModal, idLibroModal, cantidad, setCantidad }) => {
   const ip = Constantes.IP;
 
+  // Resetear cantidad cuando el modal se abre
+  useEffect(() => {
+    if (visible) {
+      setCantidad(''); // Limpiar el campo de cantidad
+    }
+  }, [visible]);
+
   const handleCreateDetail = async () => {
+    const cantidadNumero = parseInt(cantidad, 10);
+
+    if (isNaN(cantidadNumero) || cantidadNumero <= 0) {
+      Alert.alert("Debes ingresar una cantidad válida");
+      return;
+    }
 
     try {
-        if ((cantidad<0)) {
-            Alert.alert("Debes llenar todos los campos")
-            return
-        }
-        else {
-            const formData = new FormData();
-            formData.append('idLibro', idLibroModal);
-            formData.append('cantidadLibro', cantidad);
+      const formData = new FormData();
+      formData.append('idLibro', idLibroModal);
+      formData.append('cantidadLibro', cantidadNumero.toString());
 
-            const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/pedido.php?action=createDetail`, {
-                method: 'POST',
-                body: formData
-            });
+      const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/pedido.php?action=createDetail`, {
+        method: 'POST',
+        body: formData,
+      });
 
-            const data = await response.json();
-            console.log("data despues del response", data);
-            if (data.status) {
-                Alert.alert('Datos guardados correctamente');
-                cerrarModal(false);
-            } else {
-                Alert.alert('Error', data.error);
-            }
-        }
-
+      const data = await response.json();
+      if (data.status) {
+        Alert.alert('Datos guardados correctamente');
+        cerrarModal(false);
+      } else {
+        Alert.alert('Error', data.error);
+      }
     } catch (error) {
-        Alert.alert('Ocurrió un error al crear detalle');
+      Alert.alert('Ocurrió un error al crear detalle');
     }
-};
+  };
 
   const handleCancelCarrito = () => {
-    cerrarModal(false)
+    cerrarModal(false);
   };
 
   return (
@@ -49,7 +53,7 @@ const ModalCompra = ({ visible, cerrarModal, nombreLibroModal, idLibroModal, can
       animationType="slide"
       transparent={true}
       onRequestClose={() => {
-        cerrarModal(!visible);
+        cerrarModal(false);
       }}
     >
       <View style={styles.centeredView}>
@@ -65,13 +69,13 @@ const ModalCompra = ({ visible, cerrarModal, nombreLibroModal, idLibroModal, can
           />
           <Buttons
             textoBoton='Agregar al carrito'
-            accionBoton={() => handleCreateDetail()}
+            accionBoton={handleCreateDetail}
             color='#5064d4'
             estilo={{ paddingVertical: 15, paddingHorizontal: 30 }} // Ajusta el tamaño del botón
           />
           <Buttons
             textoBoton='Cancelar'
-            accionBoton={() => handleCancelCarrito()}
+            accionBoton={handleCancelCarrito}
             color='#5064d4'
             estilo={{ paddingVertical: 15, paddingHorizontal: 30 }} // Ajusta el tamaño del botón
           />

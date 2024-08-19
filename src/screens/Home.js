@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Alert, Image, ActivityIndicator } from 'react-native';
 import CardButton from '../components/HomeCards/CardButton';
 import * as Constantes from '../utils/constantes';
+import { useFocusEffect } from '@react-navigation/native';
 
-export default function Home({ navigation }) {
+export default function Home({ navigation, route }) {
   const [nombre, setNombre] = useState(null);
   const [loading, setLoading] = useState(true);
   const ip = Constantes.IP;
@@ -49,6 +50,14 @@ export default function Home({ navigation }) {
       setLoading(false);
     }
   };
+  
+  useFocusEffect(
+    React.useCallback(() => {
+      if (route.params?.updated) {
+        getUser();
+      }
+    }, [route.params?.updated])
+  );
 
   useEffect(() => {
     getUser();

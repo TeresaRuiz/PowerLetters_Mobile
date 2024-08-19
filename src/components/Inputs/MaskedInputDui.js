@@ -9,6 +9,7 @@ export default function MaskedInputDui({dui, setDui}) {
                 placeholder="Dui"
                 placeholderTextColor="gray"
                 type={'custom'}
+                keyboardType="numeric"
                 options={{
                     mask: '99999999-9' // Formato para el número de teléfono
                 }}

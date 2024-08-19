@@ -9,6 +9,7 @@ export default function MaskedInputTelefono({telefono, setTelefono}) {
                 placeholder="Teléfono"
                 placeholderTextColor="gray"
                 type={'custom'}
+                keyboardType="numeric"
                 options={{
                     mask: '9999-9999' // Formato para el número de teléfono
                 }}

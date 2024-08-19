@@ -96,42 +96,46 @@ export default function UpdateProfile({ navigation }) {
     showMode('date');
   };
 
-  const handleUpdate = async () => {
-    try {
-      if (!nombre.trim() || !apellido.trim() || !email.trim() || !direccion.trim() ||
-        !dui.trim() || !fechaNacimiento.trim() || !telefono.trim()) {
-        Alert.alert("Debes llenar todos los campos");
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append('id_usuario', idCliente);
-      formData.append('nombre_usuario', nombre);
-      formData.append('apellido_usuario', apellido);
-      formData.append('correo_usuario', email);
-      formData.append('direccion_usuario', direccion);
-      formData.append('dui_usuario', dui);
-      formData.append('nacimiento_usuario', fechaNacimiento);
-      formData.append('telefono_usuario', telefono);
-
-      const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/usuario.php?action=editProfile`, {
-        method: 'POST',
-        body: formData
-      });
-
-      const data = await response.json();
-      if (data.status) {
-        Alert.alert('Éxito', 'Datos actualizados correctamente');
-        setEditando(false);
-        obtenerDatosUsuario();
-      } else {
-        Alert.alert('Error', data.error || 'No se pudo actualizar el perfil');
-      }
-    } catch (error) {
-      console.error(error);
-      Alert.alert('Error', 'Ocurrió un error al intentar actualizar los datos del usuario');
+ // Modificar la función handleUpdate
+const handleUpdate = async () => {
+  try {
+    if (!nombre.trim() || !apellido.trim() || !email.trim() || !direccion.trim() ||
+      !dui.trim() || !fechaNacimiento.trim() || !telefono.trim()) {
+      Alert.alert("Debes llenar todos los campos");
+      return;
     }
-  };
+
+    const formData = new FormData();
+    formData.append('id_usuario', idCliente);
+    formData.append('nombre_usuario', nombre);
+    formData.append('apellido_usuario', apellido);
+    formData.append('correo_usuario', email);
+    formData.append('direccion_usuario', direccion);
+    formData.append('dui_usuario', dui);
+    formData.append('nacimiento_usuario', fechaNacimiento);
+    formData.append('telefono_usuario', telefono);
+
+    const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/usuario.php?action=editProfile`, {
+      method: 'POST',
+      body: formData
+    });
+
+    const data = await response.json();
+    if (data.status) {
+      Alert.alert('Éxito', 'Datos actualizados correctamente');
+      setEditando(false);
+      obtenerDatosUsuario();
+
+      // Volver a Home y forzar recarga
+      navigation.navigate('Home', { updated: true });
+    } else {
+      Alert.alert('Error', data.error || 'No se pudo actualizar el perfil');
+    }
+  } catch (error) {
+    console.error(error);
+    Alert.alert('Error', 'Ocurrió un error al intentar actualizar los datos del usuario');
+  }
+};
 
   const handleCancel = () => {
     setEditando(false);
