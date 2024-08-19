@@ -78,7 +78,7 @@ export default function Home({ navigation, route }) {
       <Text style={styles.subtitle}>{nombre ? nombre : 'No hay nombre para mostrar'}</Text>
       <View style={styles.cardsContainer}>
         <CardButton iconName="person-outline" label="Perfil" onPress={EditUser} color="#fff" />
-        <CardButton iconName="book-outline" label="Libros" onPress={irActualizar} color="#fff" />
+        <CardButton iconName="book-outline" label="Catálogo" onPress={irActualizar} color="#fff" />
         <CardButton iconName="log-out-outline" label="Cerrar sesión" onPress={handleLogout} color="#fff" />
       </View>
     </View>
