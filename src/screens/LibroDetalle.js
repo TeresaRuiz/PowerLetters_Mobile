@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
   },
   enviarButton: {
-    backgroundColor: '#5C3D2E',
+    backgroundColor: '#5064d4',
     padding: 15,
     borderRadius: 5,
     alignItems: 'center',
@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 10,
     right: 10,
-    backgroundColor: '#5C3D2E',
+    backgroundColor: '#5064d4',
     padding: 10,
     borderRadius: 50,
     zIndex: 1,
