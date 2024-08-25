@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, Alert, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView, Alert, TextInput, TouchableOpacity, Modal } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import * as Constantes from '../utils/constantes';
 
@@ -9,7 +9,13 @@ export default function DetalleLibro({ route }) {
   const [comentarios, setComentarios] = useState([]);
   const [nuevoComentario, setNuevoComentario] = useState('');
   const [nuevaCalificacion, setNuevaCalificacion] = useState(5);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
   const ip = Constantes.IP;
+
+  const cerrarModal = () => {
+    setModalVisible(false);
+  };
 
   const getLibroDetails = async () => {
     try {
@@ -81,6 +87,11 @@ export default function DetalleLibro({ route }) {
     getComentarios();
   }, []);
 
+  const handleImagePress = () => {
+    setSelectedImage(`${ip}/PowerLetters_TeresaVersion/api/images/libros/${imagenLibro}`);
+    setModalVisible(true);
+  };
+
   const ComentarioItem = ({ comentario }) => (
     <View style={styles.comentarioItem}>
       <View style={styles.comentarioHeader}>
@@ -119,15 +130,13 @@ export default function DetalleLibro({ route }) {
       </View>
     );
   }
-
   return (
     <ScrollView style={styles.container}>
-      <Text></Text>
-      <Text></Text>
       <View style={styles.card}>
         <Image
           source={{ uri: `${ip}/PowerLetters_TeresaVersion/api/images/libros/${imagenLibro}` }}
           style={styles.image}
+          onTouchEnd={handleImagePress} // Cambia onPress por onTouchEnd
         />
       </View>
       <View style={styles.card}>
@@ -158,11 +167,25 @@ export default function DetalleLibro({ route }) {
         <TouchableOpacity style={styles.enviarButton} onPress={enviarComentario}>
           <Text style={styles.enviarButtonText}>Enviar comentario</Text>
         </TouchableOpacity>
-        <Text></Text>
-        <Text></Text>
-        <Text></Text>
-        <Text></Text>
       </View>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)} // Esto permite cerrar el modal al presionar el botón de retroceso en Android
+      >
+        <View style={styles.modalContainer}>
+          <TouchableOpacity onPress={cerrarModal} style={styles.closeButton}>
+            <Text style={styles.closeButtonText}>Cerrar</Text>
+          </TouchableOpacity>
+          <Image
+            source={{ uri: selectedImage }}
+            style={styles.fullImage}
+            resizeMode="contain"
+          />
+        </View>
+      </Modal>
     </ScrollView>
   );
 }
@@ -208,18 +231,24 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginTop: 20,
-    marginBottom: 10,
     color: '#5C3D2E',
+    marginVertical: 15,
   },
   comentarioItem: {
-    marginBottom: 15,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 15,
+    marginBottom: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   comentarioHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 5,
   },
   comentarioUsuario: {
     fontWeight: 'bold',
@@ -229,39 +258,72 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   comentarioBurbuja: {
-    backgroundColor: '#E6E6FA',
-    borderRadius: 15,
+    marginTop: 10,
     padding: 10,
-    maxWidth: '80%',
-    alignSelf: 'flex-start',
+    backgroundColor: '#f0f0f0',
+    borderRadius: 5,
   },
   comentarioTexto: {
     color: '#5C3D2E',
   },
   formContainer: {
-    marginTop: 20,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   input: {
-    borderWidth: 1,
     borderColor: '#ddd',
+    borderWidth: 1,
+    borderRadius: 5,
     padding: 10,
     marginBottom: 10,
-    borderRadius: 5,
-    color: '#5C3D2E',
-  },
-  ratingPicker: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginBottom: 10,
+    height: 100,
+    textAlignVertical: 'top',
   },
   enviarButton: {
-    backgroundColor: '#3B5998',
-    padding: 10,
+    backgroundColor: '#5C3D2E',
+    padding: 15,
     borderRadius: 5,
     alignItems: 'center',
   },
   enviarButtonText: {
     color: '#fff',
     fontWeight: 'bold',
+    fontSize: 16,
+  },
+  ratingPicker: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginVertical: 10,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    backgroundColor: '#5C3D2E',
+    padding: 10,
+    borderRadius: 50,
+    zIndex: 1,
+  },
+  closeButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  fullImage: {
+    width: '90%',
+    height: '90%',
   },
 });
