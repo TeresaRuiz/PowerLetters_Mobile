@@ -1,47 +1,60 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { View, Text, Image, TextInput, Alert, StyleSheet } from 'react-native';
 import Button3 from '../components/Buttons/Button3';
 import * as Constantes from '../utils/constantes';
 
 const PinVerificationScreen = ({ route, navigation }) => {
-    // Estado para almacenar el PIN ingresado por el usuario
-    const [pin, setPin] = useState('');
-    // Extraer el email de los parámetros de la ruta
+    const [pin, setPin] = useState(Array(6).fill(''));
     const { email } = route.params;
     const ip = Constantes.IP;
 
-    // Función para manejar la verificación del PIN
-    const handleVerifyPin = async () => {
-        try {
-            // Verificar que el PIN no esté vacío
-            if (!pin.trim()) {
-                Alert.alert('Error', 'Por favor, ingresa el PIN.');
-                return;
-            }
+    const inputs = useRef([]);
 
-            // Realizar una solicitud POST al servidor para verificar el PIN
+    const handleVerifyPin = async () => {
+        const pinString = pin.join('');
+        if (pinString.length !== 6) {
+            Alert.alert('Error', 'Por favor, ingresa el PIN completo.');
+            return;
+        }
+
+        try {
             const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/usuario.php?action=verificarPin`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: `correo=${email}&pin=${pin}`,
+                body: `correo=${email}&pin=${pinString}`,
             });
 
             const data = await response.json();
 
             if (data.status === 1) {
-                // Si el PIN es válido, mostrar una alerta de éxito y navegar a la pantalla de nueva contraseña
                 Alert.alert('Éxito', 'PIN verificado correctamente', [
                     { text: 'OK', onPress: () => navigation.navigate('NewPassword', { id_usuario: data.id_usuario, email: email }) }
                 ]);
             } else {
-                // Si el PIN no es válido, mostrar una alerta
                 Alert.alert('Error', data.error || 'PIN inválido o expirado');
             }
         } catch (error) {
-            // Mostrar una alerta en caso de error de conexión
             Alert.alert('Error', 'Ocurrió un error en la conexión');
+        }
+    };
+
+    const handlePinChange = (text, index) => {
+        const newPin = [...pin];
+        newPin[index] = text;
+        setPin(newPin);
+
+        // Mover el foco al siguiente input si se ingresó un número
+        if (text && index < 5) {
+            inputs.current[index + 1].focus();
+        }
+    };
+
+    const handleKeyPress = ({ nativeEvent: { key } }, index) => {
+        // Si se presiona Backspace y el campo actual está vacío, mover el foco al anterior
+        if (key === 'Backspace' && index > 0 && pin[index] === '') {
+            inputs.current[index - 1].focus();
         }
     };
 
@@ -49,19 +62,28 @@ const PinVerificationScreen = ({ route, navigation }) => {
         <View style={styles.container}>
             <Text style={styles.title}>Verificar PIN</Text>
             <Image source={require('../img/onboarding2.png')} style={styles.logo} />
-            <TextInput
-                style={styles.input}
-                placeholder="Ingrese el PIN"
-                onChangeText={text => setPin(text)}
-                value={pin}
-                keyboardType="numeric"
-            />
+            <View style={styles.pinContainer}>
+                {pin.map((value, index) => (
+                    <TextInput
+                        key={index}
+                        ref={(ref) => (inputs.current[index] = ref)}
+                        style={styles.pinInput}
+                        value={value}
+                        onChangeText={(text) => handlePinChange(text, index)}
+                        onKeyPress={(event) => handleKeyPress(event, index)}
+                        keyboardType="numeric"
+                        maxLength={1}
+                        textAlign="center"
+                    />
+                ))}
+            </View>
             <Button3 style={styles.button} onPress={handleVerifyPin}>
                 <Text style={styles.buttonText}>Verificar PIN</Text>
             </Button3>
         </View>
     );
 };
+
 export default PinVerificationScreen;
 
 const styles = StyleSheet.create({
@@ -82,27 +104,19 @@ const styles = StyleSheet.create({
         height: 235,
         marginBottom: 30,
     },
-    input: {
-        width: '80%',
-        backgroundColor: '#f0f0f0',
-        height: 50,
-        borderRadius: 10,
-        paddingHorizontal: 15,
-        marginBottom: 15,
-    },
-    passwordContainer: {
-        width: '80%',
+    pinContainer: {
         flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#f0f0f0',
-        height: 50,
-        borderRadius: 10,
-        paddingHorizontal: 15,
+        justifyContent: 'space-between',
+        width: '80%',
         marginBottom: 15,
     },
-    eyeIcon: {
-        position: 'absolute',
-        right: 15,
+    pinInput: {
+        backgroundColor: 'white',
+        width: 40,
+        height: 50,
+        borderRadius: 10,
+        fontSize: 18,
+        fontWeight: 'bold',
     },
     button: {
         backgroundColor: '#3046BC',
@@ -115,9 +129,5 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 15,
         fontWeight: 'bold',
-    },
-    link: {
-        color: '#007bff',
-        fontSize: 16,
     },
 });
