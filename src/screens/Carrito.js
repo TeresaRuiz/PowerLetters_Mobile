@@ -1,55 +1,42 @@
-// Importaciones necesarias
 import React, { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, FlatList, Alert } from 'react-native';
-
+import { Text, View, StyleSheet, FlatList, Alert, Image } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-// Importa la función useFocusEffect de @react-navigation/native, 
-// que permite ejecutar un efecto cada vez que la pantalla se enfoca.
-
 import Constants from 'expo-constants';
 import * as Constantes from '../utils/constantes';
 import Buttons from '../components/Buttons/Button';
 import CarritoCard from '../components/CarritoCard/CarritoCard';
 import ModalEditarCantidad from '../components/Modales/ModalEditarCantidad';
 
+// Importa la imagen
+import emptyCartImage from '../img/carrito.png';
 
 const Carrito = ({ navigation }) => {
-  // Estado para almacenar los detalles del carrito
   const [dataDetalleCarrito, setDataDetalleCarrito] = useState([]);
-  // Estado para el id del detalle seleccionado para modificar
   const [idDetalle, setIdDetalle] = useState(null);
-  // Estado para la cantidad del producto seleccionado en el carrito
   const [cantidadLibroCarrito, setCantidadLibroCarrito] = useState(0);
-  // Estado para controlar la visibilidad del modal de edición de cantidad
   const [modalVisible, setModalVisible] = useState(false);
-  // IP del servidor
   const ip = Constantes.IP;
 
-  // Función para navegar hacia atrás a la pantalla de libros (productos)
   const backProducts = () => {
     navigation.navigate('Productos');
   };
-  // Efecto para cargar los detalles del carrito al cargar la pantalla o al enfocarse en ella
+
   useFocusEffect(
-    // La función useFocusEffect ejecuta un efecto cada vez que la pantalla se enfoca.
     React.useCallback(() => {
-      getDetalleCarrito(); // Llama a la función getDetalleCarrito.
+      getDetalleCarrito();
     }, [])
   );
 
-  // Función para obtener los detalles del carrito desde el servidor
   const getDetalleCarrito = async () => {
     try {
       const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/pedido.php?action=readDetail`, {
         method: 'GET',
       });
       const data = await response.json();
-      console.log(data, "Data desde getDetalleCarrito")
       if (data.status) {
         setDataDetalleCarrito(data.dataset);
       } else {
-        console.log("No hay detalles del carrito disponibles")
-        //Alert.alert('ADVERTENCIA', data.error);
+        console.log("No hay detalles del carrito disponibles");
       }
     } catch (error) {
       console.error(error, "Error desde Catch");
@@ -57,7 +44,6 @@ const Carrito = ({ navigation }) => {
     }
   };
 
-  // Función para finalizar el pedido
   const finalizarPedido = async () => {
     try {
       const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/pedido.php?action=finishOrder`, {
@@ -65,8 +51,7 @@ const Carrito = ({ navigation }) => {
       });
       const data = await response.json();
       if (data.status) {
-        Alert.alert("Se finalizó la compra correctamente")
-        // Guardar el pedido en el historial
+        Alert.alert("Se finalizó la compra correctamente");
         setDataDetalleCarrito([]); // Limpiar la lista de detalles del carrito
         navigation.navigate('TabNavigator', { screen: 'Productos' });
       } else {
@@ -77,15 +62,12 @@ const Carrito = ({ navigation }) => {
     }
   };
 
-
-  // Función para manejar la modificación de un detalle del carrito
   const handleEditarDetalle = (idDetalle, cantidadDetalle) => {
     setModalVisible(true);
     setIdDetalle(idDetalle);
     setCantidadLibroCarrito(cantidadDetalle);
   };
 
-  // Función para renderizar cada elemento del carrito
   const renderItem = ({ item }) => (
     <CarritoCard
       item={item}
@@ -104,7 +86,6 @@ const Carrito = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {/* Componente de modal para editar cantidad */}
       <ModalEditarCantidad
         setModalVisible={setModalVisible}
         modalVisible={modalVisible}
@@ -115,10 +96,8 @@ const Carrito = ({ navigation }) => {
         getDetalleCarrito={getDetalleCarrito}
       />
 
-      {/* Título de la pantalla */}
       <Text style={styles.title}>Carrito de compras</Text>
 
-      {/* Lista de detalles del carrito */}
       {dataDetalleCarrito.length > 0 ? (
         <FlatList
           data={dataDetalleCarrito}
@@ -126,10 +105,12 @@ const Carrito = ({ navigation }) => {
           keyExtractor={(item) => item.id_detalle.toString()}
         />
       ) : (
-        <Text style={styles.titleDetalle}>No hay detalles del carrito disponibles.</Text>
+        <View style={styles.emptyContainer}>
+          <Image source={emptyCartImage} style={styles.emptyImage} />
+          <Text style={styles.titleDetalle}>No hay detalles del carrito disponibles.</Text>
+        </View>
       )}
 
-      {/* Botones de finalizar pedido y regresar a productos */}
       <View style={styles.containerButtons}>
         {dataDetalleCarrito.length > 0 && (
           <Buttons
@@ -150,7 +131,6 @@ const Carrito = ({ navigation }) => {
 
 export default Carrito;
 
-// Estilos
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -175,5 +155,15 @@ const styles = StyleSheet.create({
   containerButtons: {
     justifyContent: 'center',
     alignItems: 'center',
-  }
+  },
+  emptyContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
+  emptyImage: {
+    width: 200,
+    height: 200,
+    marginBottom: 16,
+  },
 });

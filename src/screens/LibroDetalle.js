@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, Alert, TextInput, Button, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView, Alert, TextInput, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import * as Constantes from '../utils/constantes';
 
@@ -18,7 +18,7 @@ export default function DetalleLibro({ route }) {
 
       const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/libros.php?action=readOne`, {
         method: 'POST',
-        body: formData
+        body: formData,
       });
       const data = await response.json();
       if (data.status) {
@@ -38,7 +38,7 @@ export default function DetalleLibro({ route }) {
 
       const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/comentarios.php?action=readOneComment`, {
         method: 'POST',
-        body: formData
+        body: formData,
       });
       const data = await response.json();
       if (data.status) {
@@ -60,7 +60,7 @@ export default function DetalleLibro({ route }) {
 
       const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/comentarios.php?action=createRow`, {
         method: 'POST',
-        body: formData
+        body: formData,
       });
       const data = await response.json();
       if (data.status) {
@@ -75,6 +75,7 @@ export default function DetalleLibro({ route }) {
       Alert.alert('Error', 'Ocurrió un error al enviar el comentario');
     }
   };
+
   useEffect(() => {
     getLibroDetails();
     getComentarios();
@@ -88,7 +89,7 @@ export default function DetalleLibro({ route }) {
           {[1, 2, 3, 4, 5].map((estrella) => (
             <AntDesign
               key={estrella}
-              name={estrella <= comentario.calificacion ? "star" : "staro"}
+              name={estrella <= comentario.calificacion ? 'star' : 'staro'}
               size={16}
               color="#FFD700"
             />
@@ -105,11 +106,7 @@ export default function DetalleLibro({ route }) {
     <View style={styles.ratingPicker}>
       {[1, 2, 3, 4, 5].map((estrella) => (
         <TouchableOpacity key={estrella} onPress={() => setNuevaCalificacion(estrella)}>
-          <AntDesign
-            name={estrella <= nuevaCalificacion ? "star" : "staro"}
-            size={30}
-            color="#FFD700"
-          />
+          <AntDesign name={estrella <= nuevaCalificacion ? 'star' : 'staro'} size={30} color="#FFD700" />
         </TouchableOpacity>
       ))}
     </View>
@@ -127,18 +124,22 @@ export default function DetalleLibro({ route }) {
     <ScrollView style={styles.container}>
       <Text></Text>
       <Text></Text>
-      <Image
-        source={{ uri: `${ip}/PowerLetters_TeresaVersion/api/images/libros/${imagenLibro}` }}
-        style={styles.image}
-      />
-      <Text style={styles.title}>{tituloLibro}</Text>
-      <Text style={styles.text}>Autor: {libro.nombre_autor}</Text>
-      <Text style={styles.text}>Precio: ${precioLibro}</Text>
-      <Text style={styles.text}>Descripción: {descripcionLibro}</Text>
-      <Text style={styles.text}>Clasificación: {libro.nombre_clasificacion}</Text>
-      <Text style={styles.text}>Editorial: {libro.nombre_editorial}</Text>
-      <Text style={styles.text}>Existencias: {libro.existencias}</Text>
-      <Text style={styles.text}>Género: {libro.nombre_genero}</Text>
+      <View style={styles.card}>
+        <Image
+          source={{ uri: `${ip}/PowerLetters_TeresaVersion/api/images/libros/${imagenLibro}` }}
+          style={styles.image}
+        />
+      </View>
+      <View style={styles.card}>
+        <Text style={styles.title}>{tituloLibro}</Text>
+        <Text style={styles.text}>Autor: {libro.nombre_autor}</Text>
+        <Text style={styles.text}>Precio: ${precioLibro}</Text>
+        <Text style={styles.text}>Descripción: {descripcionLibro}</Text>
+        <Text style={styles.text}>Clasificación: {libro.nombre_clasificacion}</Text>
+        <Text style={styles.text}>Editorial: {libro.nombre_editorial}</Text>
+        <Text style={styles.text}>Existencias: {libro.existencias}</Text>
+        <Text style={styles.text}>Género: {libro.nombre_genero}</Text>
+      </View>
 
       <Text style={styles.sectionTitle}>Comentarios</Text>
       {comentarios.map((comentario) => (
@@ -177,11 +178,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  image: {
-    width: 300,
-    height: 500,
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 15,
     marginBottom: 15,
-    marginLeft: 18,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  image: {
+    width: '100%',
+    height: 400,
+    borderRadius: 8,
   },
   title: {
     fontSize: 24,
