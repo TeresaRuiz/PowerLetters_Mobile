@@ -4,6 +4,7 @@ import * as Constantes from '../utils/constantes';
 import LibroCard from '../components/Libros/LibroCard';
 import ModalCompra from '../components/Modales/ModalCompra';
 import RNPickerSelect from 'react-native-picker-select';
+import { Ionicons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import { FontAwesome } from '@expo/vector-icons';
 
@@ -83,6 +84,9 @@ export default function Libros({ navigation }) {
 
   return (
     <View style={styles.container}>
+       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Ionicons name="arrow-back" size={28} color="#000" />
+      </TouchableOpacity>
       <Text style={styles.title}>Catálogo de libros</Text>
       <ModalCompra
         visible={modalVisible}
@@ -142,6 +146,12 @@ const styles = StyleSheet.create({
   containerFlat: {
     flex: 1,
     paddingTop: Constants.statusBarHeight,
+  },
+  backButton: {
+    position: 'absolute',
+    top: 30,
+    left: 20,
+    zIndex: 10,
   },
   container: {
     flex: 1,

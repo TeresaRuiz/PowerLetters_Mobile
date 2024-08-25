@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Alert, Image, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Alert, Image, ScrollView, ActivityIndicator, RefreshControl } from 'react-native';
 import * as Constantes from '../utils/constantes';
 
 export default function HistorialPedidos({ navigation }) {
   const [historial, setHistorial] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false); // Estado para el refresco
   const ip = Constantes.IP;
 
   const getHistorial = async () => {
@@ -22,6 +23,7 @@ export default function HistorialPedidos({ navigation }) {
       Alert.alert('Error', 'Ocurrió un error al obtener el historial de pedidos');
     } finally {
       setLoading(false);
+      setRefreshing(false); // Finaliza el refresco
     }
   };
 
@@ -29,7 +31,12 @@ export default function HistorialPedidos({ navigation }) {
     getHistorial();
   }, []);
 
-  if (loading) {
+  const onRefresh = () => {
+    setRefreshing(true); // Inicia el refresco
+    getHistorial();
+  };
+
+  if (loading && !refreshing) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#5C3D2E" />
@@ -38,9 +45,14 @@ export default function HistorialPedidos({ navigation }) {
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.title}></Text>
-        <Text style={styles.title}>Historial de pedidos</Text>
+    <ScrollView 
+      contentContainerStyle={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
+      <Text style={styles.title}></Text>
+      <Text style={styles.title}>Historial de pedidos</Text>
       {historial.length === 0 ? (
         <Text style={styles.subtitle}>No hay pedidos para mostrar</Text>
       ) : (

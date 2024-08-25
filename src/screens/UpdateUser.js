@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Alert, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, Alert, ScrollView, TouchableOpacity, Image, RefreshControl } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Ionicons } from '@expo/vector-icons'; // Asegúrate de instalar esta librería
+import { Ionicons } from '@expo/vector-icons';
 import * as Constantes from '../utils/constantes';
 import Input from '../components/Inputs/Input';
 import InputMultiline from '../components/Inputs/InputMultiline';
@@ -16,6 +16,7 @@ export default function UpdateProfile({ navigation }) {
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
   const [editando, setEditando] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   const [idCliente, setIdCliente] = useState('');
   const [nombre, setNombre] = useState('');
@@ -96,50 +97,54 @@ export default function UpdateProfile({ navigation }) {
     showMode('date');
   };
 
- // Modificar la función handleUpdate
-const handleUpdate = async () => {
-  try {
-    if (!nombre.trim() || !apellido.trim() || !email.trim() || !direccion.trim() ||
-      !dui.trim() || !fechaNacimiento.trim() || !telefono.trim()) {
-      Alert.alert("Debes llenar todos los campos");
-      return;
+  const handleUpdate = async () => {
+    try {
+      if (!nombre.trim() || !apellido.trim() || !email.trim() || !direccion.trim() ||
+        !dui.trim() || !fechaNacimiento.trim() || !telefono.trim()) {
+        Alert.alert("Debes llenar todos los campos");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('id_usuario', idCliente);
+      formData.append('nombre_usuario', nombre);
+      formData.append('apellido_usuario', apellido);
+      formData.append('correo_usuario', email);
+      formData.append('direccion_usuario', direccion);
+      formData.append('dui_usuario', dui);
+      formData.append('nacimiento_usuario', fechaNacimiento);
+      formData.append('telefono_usuario', telefono);
+
+      const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/usuario.php?action=editProfile`, {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await response.json();
+      if (data.status) {
+        Alert.alert('Éxito', 'Datos actualizados correctamente');
+        setEditando(false);
+        obtenerDatosUsuario();
+
+        // Volver a Home y forzar recarga
+        navigation.navigate('Home', { updated: true });
+      } else {
+        Alert.alert('Error', data.error || 'No se pudo actualizar el perfil');
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Error', 'Ocurrió un error al intentar actualizar los datos del usuario');
     }
-
-    const formData = new FormData();
-    formData.append('id_usuario', idCliente);
-    formData.append('nombre_usuario', nombre);
-    formData.append('apellido_usuario', apellido);
-    formData.append('correo_usuario', email);
-    formData.append('direccion_usuario', direccion);
-    formData.append('dui_usuario', dui);
-    formData.append('nacimiento_usuario', fechaNacimiento);
-    formData.append('telefono_usuario', telefono);
-
-    const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/usuario.php?action=editProfile`, {
-      method: 'POST',
-      body: formData
-    });
-
-    const data = await response.json();
-    if (data.status) {
-      Alert.alert('Éxito', 'Datos actualizados correctamente');
-      setEditando(false);
-      obtenerDatosUsuario();
-
-      // Volver a Home y forzar recarga
-      navigation.navigate('Home', { updated: true });
-    } else {
-      Alert.alert('Error', data.error || 'No se pudo actualizar el perfil');
-    }
-  } catch (error) {
-    console.error(error);
-    Alert.alert('Error', 'Ocurrió un error al intentar actualizar los datos del usuario');
-  }
-};
+  };
 
   const handleCancel = () => {
     setEditando(false);
     obtenerDatosUsuario();
+  };
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    obtenerDatosUsuario().then(() => setRefreshing(false));
   };
 
   useEffect(() => {
@@ -148,8 +153,15 @@ const handleUpdate = async () => {
 
   // Renderizado del componente
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-       <Text style={styles.title}></Text>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Ionicons name="arrow-back" size={28} color="#000" />
+      </TouchableOpacity>
       <Text style={styles.title}>Actualizar perfil</Text>
 
       <Image source={require('../img/registro.png')} style={styles.image} />
@@ -228,18 +240,24 @@ const handleUpdate = async () => {
   );
 }
 
-
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 20,
     paddingHorizontal: 20,
     backgroundColor: '#f0ecfc',
   },
+  backButton: {
+    position: 'absolute',
+    top: 40,
+    left: 20,
+    zIndex: 10,
+  },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 15,
-    marginLeft: 85
+    marginLeft: 85,
+    marginTop: 60,
   },
   contenedorFecha: {
     width: '100%',
@@ -258,11 +276,6 @@ const styles = StyleSheet.create({
     height: 200,
     resizeMode: 'contain',
     marginVertical: 10,
-  },
-  iconContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
   },
   iconContainer: {
     flexDirection: 'row',
