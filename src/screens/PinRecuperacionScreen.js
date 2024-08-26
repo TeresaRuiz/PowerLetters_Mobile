@@ -1,49 +1,52 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, Image, TextInput, Alert, StyleSheet } from 'react-native';
-import Button3 from '../components/Buttons/Button3';
-import * as Constantes from '../utils/constantes';
+import Button3 from '../components/Buttons/Button3'; // Componente de botón personalizado
+import * as Constantes from '../utils/constantes'; // Importa constantes para la configuración de la API
 
 const PinVerificationScreen = ({ route, navigation }) => {
+    // Estado para almacenar el PIN ingresado como un array de 6 caracteres
     const [pin, setPin] = useState(Array(6).fill(''));
-    const { email } = route.params;
-    const ip = Constantes.IP;
-
+    const { email } = route.params; // Obtiene el correo electrónico de los parámetros de la ruta
+    const ip = Constantes.IP; // IP de la API
+    // Referencia para los inputs del PIN
     const inputs = useRef([]);
-
+    // Función para manejar la verificación del PIN
     const handleVerifyPin = async () => {
-        const pinString = pin.join('');
-        if (pinString.length !== 6) {
+        const pinString = pin.join(''); // Convierte el array de PIN a una cadena
+        if (pinString.length !== 6) { // Verifica que el PIN tenga 6 caracteres
             Alert.alert('Error', 'Por favor, ingresa el PIN completo.');
             return;
         }
 
         try {
+             // Realiza una solicitud POST a la API para verificar el PIN
             const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/usuario.php?action=verificarPin`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: `correo=${email}&pin=${pinString}`,
+                body: `correo=${email}&pin=${pinString}`, // Envía el correo y el PIN
             });
 
             const data = await response.json();
-
+             // Convierte la respuesta a JSON
+            // Verifica el estado de la respuesta
             if (data.status === 1) {
                 Alert.alert('Éxito', 'PIN verificado correctamente', [
                     { text: 'OK', onPress: () => navigation.navigate('NewPassword', { id_usuario: data.id_usuario, email: email }) }
                 ]);
             } else {
-                Alert.alert('Error', data.error || 'PIN inválido o expirado');
+                Alert.alert('Error', data.error || 'PIN inválido o expirado'); // Muestra un mensaje de error si el PIN es inválido
             }
         } catch (error) {
-            Alert.alert('Error', 'Ocurrió un error en la conexión');
+            Alert.alert('Error', 'Ocurrió un error en la conexión'); // Maneja errores de conexión
         }
     };
-
+// Función para manejar el cambio en los inputs del PIN
     const handlePinChange = (text, index) => {
-        const newPin = [...pin];
-        newPin[index] = text;
-        setPin(newPin);
+        const newPin = [...pin]; // Crea una copia del estado del
+        newPin[index] = text;  // Actualiza el valor del PIN en el índice correspondiente
+        setPin(newPin); // Actualiza el estado del PIN
 
         // Mover el foco al siguiente input si se ingresó un número
         if (text && index < 5) {
@@ -57,7 +60,7 @@ const PinVerificationScreen = ({ route, navigation }) => {
             inputs.current[index - 1].focus();
         }
     };
-
+// Renderizado del componente
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Verificar PIN</Text>
