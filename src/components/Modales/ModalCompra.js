@@ -17,7 +17,7 @@ const ModalCompra = ({ visible, cerrarModal, nombreLibroModal, idLibroModal, can
     const cantidadNumero = parseInt(cantidad, 10);
 
     if (isNaN(cantidadNumero) || cantidadNumero <= 0) {
-      Alert.alert("Debes ingresar una cantidad válida");
+      Alert.alert("Debes ingresar una cantidad válida, no puede ser un número negativo");
       return;
     }
 
