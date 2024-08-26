@@ -13,6 +13,7 @@ export default function DetalleLibro({ route }) {
   const [nuevaCalificacion, setNuevaCalificacion] = useState(5);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [refreshing, setRefreshing] = useState(false); // Estado para manejar el refresco
   // IP de la API
   const ip = Constantes.IP;
  // Función para cerrar el modal de imagen
@@ -61,6 +62,10 @@ export default function DetalleLibro({ route }) {
   };
 // Función para enviar un nuevo comentario
   const enviarComentario = async () => {
+    if (!nuevoComentario.trim()) {
+      Alert.alert('Error', 'El comentario no puede estar vacío.');
+      return;
+    }
     try {
       const formData = new FormData();
       formData.append('id_libro', id_libro);
@@ -94,6 +99,15 @@ export default function DetalleLibro({ route }) {
     setSelectedImage(`${ip}/PowerLetters_TeresaVersion/api/images/libros/${imagenLibro}`);
     setModalVisible(true); // Muestra el modal con la imagen
   };
+
+    // Función para manejar el refresco
+    const onRefresh = () => {
+      setRefreshing(true); // Establece el estado de refresco a verdadero
+      getLibroDetails(); // Vuelve a obtener los detalles del libro
+      getComentarios(); // Vuelve a obtener los comentarios
+      setRefreshing(false); // Establece el estado de refresco a falso después de obtener los datos
+    };
+  
 // Componente para mostrar un comentario
   const ComentarioItem = ({ comentario }) => (
     <View style={styles.comentarioItem}>
@@ -135,7 +149,12 @@ export default function DetalleLibro({ route }) {
   }
   // Renderizado del componente principal
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView 
+      style={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} /> // Agrega el control de refresco
+      }
+    >
       <View style={styles.card}>
         <Image
           source={{ uri: `${ip}/PowerLetters_TeresaVersion/api/images/libros/${imagenLibro}` }}
