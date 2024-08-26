@@ -3,39 +3,53 @@ import { View, Text, StyleSheet, Alert, Image, ScrollView, ActivityIndicator, Re
 import * as Constantes from '../utils/constantes';
 
 export default function HistorialPedidos({ navigation }) {
+  // Estado para almacenar el historial de pedidos
   const [historial, setHistorial] = useState([]);
+  // Estado para controlar el indicador de carga
   const [loading, setLoading] = useState(true);
+  // Estado para controlar el refresco
   const [refreshing, setRefreshing] = useState(false); // Estado para el refresco
+  // IP de la API
   const ip = Constantes.IP;
-
+// Función para obtener el historial de pedidos
   const getHistorial = async () => {
     try {
+      // Realiza una solicitud GET a la API para obtener el historial de pedidos
       const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/pedido.php?action=readHistorial`, {
         method: 'GET',
       });
+      // Convierte la respuesta en formato JSON
       const data = await response.json();
+      // Verifica si la respuesta es exitosa
       if (data.status) {
+        // Actualiza el estado con el historial de pedidos obtenido
         setHistorial(data.dataset);
+        // Muestra un mensaje de error si no se puede obtener el historial
       } else {
         Alert.alert('Error', data.error);
       }
     } catch (error) {
+      // Maneja cualquier error que ocurra durante la solicitud
       Alert.alert('Error', 'Ocurrió un error al obtener el historial de pedidos');
     } finally {
+       // Finaliza el indicador de carga
       setLoading(false);
-      setRefreshing(false); // Finaliza el refresco
+      // Finaliza el refresco
+      setRefreshing(false); 
     }
   };
-
+// useEffect para obtener el historial de pedidos al montar el componente
   useEffect(() => {
     getHistorial();
   }, []);
-
+// Función para manejar el refresco
   const onRefresh = () => {
+    // Inicia el refresco
     setRefreshing(true); // Inicia el refresco
+    // Llama a getHistorial para actualizar el historial
     getHistorial();
   };
-
+// Si está cargando y no hay refresco, muestra un indicador de carga
   if (loading && !refreshing) {
     return (
       <View style={styles.loadingContainer}>
@@ -43,22 +57,26 @@ export default function HistorialPedidos({ navigation }) {
       </View>
     );
   }
-
+ // Renderizado del componente
   return (
     <ScrollView 
       contentContainerStyle={styles.container}
       refreshControl={
+        // Agrega el control de refresco
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
     >
       <Text style={styles.title}></Text>
       <Text style={styles.title}>Historial de pedidos</Text>
+      {/* Si no hay pedidos, muestra un mensaje */}
       {historial.length === 0 ? (
         <Text style={styles.subtitle}>No hay pedidos para mostrar</Text>
       ) : (
+        // Mapea el historial y muestra cada pedido
         historial.map((item, index) => (
           <View key={index} style={styles.card}>
             <Image
+            // Muestra la imagen del libro
               source={{ uri: `${ip}/PowerLetters_TeresaVersion/api/images/libros/${item.imagen}` }}
               style={styles.image}
             />
