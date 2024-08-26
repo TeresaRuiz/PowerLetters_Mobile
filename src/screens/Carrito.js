@@ -56,32 +56,25 @@ const Carrito = ({ navigation }) => {
     }
   };
 // Función para finalizar el pedido
-  const finalizarPedido = async () => {
-    try {
-       // Realiza una solicitud GET a la API para finalizar el pedido
+const finalizarPedido = async () => {
+  try {
       const response = await fetch(`${ip}/PowerLetters_TeresaVersion/api/services/public/pedido.php?action=finishOrder`, {
-        method: 'GET',
+          method: 'GET',
       });
-       // Convierte la respuesta en formato JSON
       const data = await response.json();
-       
-    // Verifica si la respuesta contiene un estado exitoso
+
       if (data.status) {
-         // Muestra una alerta de éxito al finalizar la compra
-        Alert.alert("Se finalizó la compra correctamente");
-        // Limpia la lista de detalles del carrito
-        setDataDetalleCarrito([]); // Limpiar la lista de detalles del carrito
-        // Navega de vuelta a la pantalla de productos
-        navigation.navigate('TabNavigator', { screen: 'Productos' });
+          Alert.alert("Se finalizó la compra correctamente");
+          setDataDetalleCarrito([]); // Limpia la lista de detalles del carrito
+
+          // Navega al historial de pedidos con un parámetro
       } else {
-        // Si hay un error, muestra el mensaje de error recibido
-        Alert.alert('Error', data.error);
+          Alert.alert('Error', data.error);
       }
-    } catch (error) {
-      // Maneja cualquier error que ocurra durante la solicitud
+  } catch (error) {
       Alert.alert('Error', 'Ocurrió un error al finalizar pedido');
-    }
-  };
+  }
+};
 // Función para manejar la edición de un detalle del carrito
   const handleEditarDetalle = (idDetalle, cantidadDetalle) => {
     // Muestra el modal para editar la cantidad del producto

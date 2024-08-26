@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Alert, Image, ScrollView, ActivityIndicator, RefreshControl } from 'react-native';
 import * as Constantes from '../utils/constantes';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function HistorialPedidos({ navigation }) {
   // Estado para almacenar el historial de pedidos
@@ -9,7 +10,7 @@ export default function HistorialPedidos({ navigation }) {
   const [loading, setLoading] = useState(true);
   // Estado para controlar el refresco
   const [refreshing, setRefreshing] = useState(false);
-  
+
   // IP de la API
   const ip = Constantes.IP;
 
@@ -38,6 +39,13 @@ export default function HistorialPedidos({ navigation }) {
     getHistorial();
   }, []);
 
+  // useFocusEffect para actualizar el historial cuando la pantalla gana el foco
+  useFocusEffect(
+    React.useCallback(() => {
+      getHistorial(); // Llama a getHistorial para actualizar el historial
+    }, [])
+  );
+
   // Función para manejar el refresco
   const onRefresh = () => {
     setRefreshing(true); // Inicia el refresco
@@ -55,12 +63,13 @@ export default function HistorialPedidos({ navigation }) {
 
   // Renderizado del componente
   return (
-    <ScrollView 
+    <ScrollView
       contentContainerStyle={styles.container}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} /> // Agrega el control de refresco
       }
     >
+      <Text style={styles.title}></Text>
       <Text style={styles.title}>Historial de pedidos</Text>
       {/* Si no hay pedidos, muestra un mensaje */}
       {historial.length === 0 ? (
