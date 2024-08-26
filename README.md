@@ -100,3 +100,6 @@ Para llevar a cabo este proyecto, se requerirá el desarrollo de una interfaz we
   - **Versión:** ^7.20.0
   - **Descripción:** Compilador de JavaScript para transformar el código moderno en una versión compatible con navegadores y entornos más antiguos.
   - **Instalación:** `npm install @babel/core --save-dev`
+
+## Enlace para descargar apk:
+- **https://expo.dev/accounts/teresalaq/projects/powerlettersteresa/builds/257c4838-6574-4740-a8b9-6b1d65697262**
