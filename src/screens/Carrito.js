@@ -128,7 +128,7 @@ const Carrito = ({ navigation }) => {
     </View>
   );
 };
-
+//Estilo de la pantalla
 export default Carrito;
 
 const styles = StyleSheet.create({
