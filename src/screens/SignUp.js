@@ -11,6 +11,7 @@ import MaskedInputTelefono from '../components/Inputs/MaskedInputTelefono';
 import MaskedInputDui from '../components/Inputs/MaskedInputDui';
 import InputEmail from '../components/Inputs/InputEmail';
 import SocialButton from '../components/Inputs/SocialButton';
+import { Ionicons } from '@expo/vector-icons';
 
 
 export default function SignUp({ navigation }) {
@@ -109,7 +110,11 @@ export default function SignUp({ navigation }) {
     };
 
     return (
+      
         <ScrollView contentContainerStyle={styles.container}>
+             <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+       <Ionicons name="arrow-back" size={28} color="#000" />
+     </TouchableOpacity>
             {/* Título y subtítulo del formulario */}
             <Text style={styles.title}>¡Regístrate!</Text>
             <Text style={styles.subtitle}>Crea tu cuenta en Power Letters</Text>
@@ -216,6 +221,12 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 10,
     },
+    backButton: {
+        position: 'absolute',
+        top: 30,
+        left: 20,
+        zIndex: 10,
+      },
     subtitle: {
         fontSize: 25,
         color: 'black',

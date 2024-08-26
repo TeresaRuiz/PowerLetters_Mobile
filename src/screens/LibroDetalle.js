@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, Alert, TextInput, TouchableOpacity, Modal } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Image, ScrollView, Alert, TextInput, TouchableOpacity, Modal, RefreshControl } from 'react-native';
 import { AntDesign } from '@expo/vector-icons'; // Importa iconos de AntDesign
-import * as Constantes from '../utils/constantes'; // Importa constantes para la configuración de la API
+import * as Constantes from '../utils/constantes'; 
+import { Ionicons } from '@expo/vector-icons'; // Importa constantes para la configuración de la API
 
-export default function DetalleLibro({ route }) {
+export default function DetalleLibro({ route, navigation }) {
    // Extrae los parámetros de la ruta
   const { id_libro, tituloLibro, descripcionLibro, precioLibro, imagenLibro } = route.params;
+  
   // Estados para manejar la información del libro y comentarios
   const [libro, setLibro] = useState(null);
   const [comentarios, setComentarios] = useState([]);
@@ -14,13 +16,16 @@ export default function DetalleLibro({ route }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [refreshing, setRefreshing] = useState(false); // Estado para manejar el refresco
+
   // IP de la API
   const ip = Constantes.IP;
- // Función para cerrar el modal de imagen
+
+  // Función para cerrar el modal de imagen
   const cerrarModal = () => {
     setModalVisible(false);
   };
-// Función para obtener los detalles del libro
+
+  // Función para obtener los detalles del libro
   const getLibroDetails = async () => {
     try {
       const formData = new FormData();
@@ -40,7 +45,8 @@ export default function DetalleLibro({ route }) {
       Alert.alert('Error', 'Ocurrió un error al obtener los detalles del libro');
     }
   };
-// Función para obtener los comentarios del libro
+
+  // Función para obtener los comentarios del libro
   const getComentarios = async () => {
     try {
       const formData = new FormData();
@@ -60,12 +66,14 @@ export default function DetalleLibro({ route }) {
       Alert.alert('Error', 'Ocurrió un error al obtener los comentarios');
     }
   };
-// Función para enviar un nuevo comentario
+
+  // Función para enviar un nuevo comentario
   const enviarComentario = async () => {
     if (!nuevoComentario.trim()) {
       Alert.alert('Error', 'El comentario no puede estar vacío.');
       return;
     }
+
     try {
       const formData = new FormData();
       formData.append('id_libro', id_libro);
@@ -81,7 +89,7 @@ export default function DetalleLibro({ route }) {
         Alert.alert('Éxito', 'Comentario añadido correctamente');
         setNuevoComentario(''); // Limpia el campo de comentario
         setNuevaCalificacion(5); // Reinicia la calificación a 5
-        getComentarios(); // Actualizar la lista de comentarios
+        getComentarios(); // Actualiza la lista de comentarios
       } else {
         Alert.alert('Error', data.error || 'No se pudo añadir el comentario');
       }
@@ -89,26 +97,27 @@ export default function DetalleLibro({ route }) {
       Alert.alert('Error', 'Ocurrió un error al enviar el comentario');
     }
   };
-// useEffect para obtener los detalles del libro y los comentarios al montar el componente
+
+  // useEffect para obtener los detalles del libro y los comentarios al montar el componente
   useEffect(() => {
     getLibroDetails();
     getComentarios();
   }, []);
- // Función para manejar el evento de toque en la imagen
+
+  // Función para manejar el refresco
+  const onRefresh = async () => {
+    setRefreshing(true); // Establece el estado de refresco a verdadero
+    await Promise.all([getLibroDetails(), getComentarios()]); // Espera a que ambas funciones se completen
+    setRefreshing(false); // Establece el estado de refresco a falso
+  };
+
+  // Función para manejar el evento de toque en la imagen
   const handleImagePress = () => {
     setSelectedImage(`${ip}/PowerLetters_TeresaVersion/api/images/libros/${imagenLibro}`);
     setModalVisible(true); // Muestra el modal con la imagen
   };
 
-    // Función para manejar el refresco
-    const onRefresh = () => {
-      setRefreshing(true); // Establece el estado de refresco a verdadero
-      getLibroDetails(); // Vuelve a obtener los detalles del libro
-      getComentarios(); // Vuelve a obtener los comentarios
-      setRefreshing(false); // Establece el estado de refresco a falso después de obtener los datos
-    };
-  
-// Componente para mostrar un comentario
+  // Componente para mostrar un comentario
   const ComentarioItem = ({ comentario }) => (
     <View style={styles.comentarioItem}>
       <View style={styles.comentarioHeader}>
@@ -129,7 +138,8 @@ export default function DetalleLibro({ route }) {
       </View>
     </View>
   );
-// Componente para seleccionar la calificación
+
+  // Componente para seleccionar la calificación
   const RatingPicker = () => (
     <View style={styles.ratingPicker}>
       {[1, 2, 3, 4, 5].map((estrella) => (
@@ -139,7 +149,8 @@ export default function DetalleLibro({ route }) {
       ))}
     </View>
   );
-// Si no hay detalles del libro, muestra un indicador de carga
+
+  // Si no hay detalles del libro, muestra un indicador de carga
   if (!libro) {
     return (
       <View style={styles.loadingContainer}>
@@ -147,6 +158,7 @@ export default function DetalleLibro({ route }) {
       </View>
     );
   }
+
   // Renderizado del componente principal
   return (
     <ScrollView 
@@ -155,6 +167,11 @@ export default function DetalleLibro({ route }) {
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} /> // Agrega el control de refresco
       }
     >
+       <Text style={styles.title}></Text>
+       {/* Botón para regresar a la pantalla anterior */}
+       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Ionicons name="arrow-back" size={28} color="#000" />
+      </TouchableOpacity>
       <View style={styles.card}>
         <Image
           source={{ uri: `${ip}/PowerLetters_TeresaVersion/api/images/libros/${imagenLibro}` }}
@@ -191,7 +208,8 @@ export default function DetalleLibro({ route }) {
           <Text style={styles.enviarButtonText}>Enviar comentario</Text>
         </TouchableOpacity>
       </View>
-       {/* Modal para mostrar la imagen del libro */}
+
+      {/* Modal para mostrar la imagen del libro */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -212,6 +230,7 @@ export default function DetalleLibro({ route }) {
     </ScrollView>
   );
 }
+
 // Estilos del componente
 const styles = StyleSheet.create({
   container: {
@@ -235,6 +254,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
+  
   image: {
     width: '100%',
     height: 400,
