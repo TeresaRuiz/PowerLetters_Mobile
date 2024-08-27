@@ -82,7 +82,7 @@ const NewPasswordScreen = ({ route, navigation }) => {
         </TouchableOpacity>
       </View>
       <Button3 style={styles.button} onPress={handleChangePassword}>
-        <Text style={styles.buttonText}>Cambiar Contraseña</Text>
+        <Text style={styles.buttonText}>Cambiar contraseña</Text>
       </Button3>
     </View>
   );

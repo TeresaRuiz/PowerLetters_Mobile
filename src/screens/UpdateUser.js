@@ -217,10 +217,10 @@ export default function UpdateProfile({ navigation }) {
         editable={editando}
       />
       <View style={styles.contenedorFecha}>
-        <Text style={styles.fecha}>Fecha Nacimiento</Text>
+        <Text style={styles.fecha}>Fecha de nacimiento</Text>
         {editando && (
           <TouchableOpacity onPress={showDatepicker}>
-            <Text style={styles.fechaSeleccionar}>Seleccionar Fecha:</Text>
+            <Text style={styles.fechaSeleccionar}>Seleccionar fecha:</Text>
           </TouchableOpacity>
         )}
         <Text style={styles.fecha}>Selección: {fechaNacimiento}</Text>
