@@ -149,9 +149,9 @@ export default function SignUp({ navigation }) {
                 setDui={setDui} />
             {/* Sección para seleccionar la fecha de nacimiento */}
             <View style={styles.contenedorFecha}>
-                <Text style={styles.fecha}>Fecha Nacimiento</Text>
+                <Text style={styles.fecha}>Fecha de nacimiento</Text>
                 {/* Botón para abrir el DateTimePicker */}
-                <TouchableOpacity onPress={showDatepicker}><Text style={styles.fechaSeleccionar}>Seleccionar Fecha:</Text></TouchableOpacity>
+                <TouchableOpacity onPress={showDatepicker}><Text style={styles.fechaSeleccionar}>Seleccionar fecha:</Text></TouchableOpacity>
                 {/* Muestra la fecha seleccionada */}
                 <Text style={styles.fecha}>Selección: {fechaNacimiento}</Text>
                 {/* Muestra el DateTimePicker si show es true */}
